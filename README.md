@@ -1,4 +1,4 @@
-# Microsat
+# AUSOME Microsat
 
 Ian Francine Demavivas
 Galileo Gregory Abrasaldo II
@@ -24,9 +24,10 @@ Never gonna give you up!
 #Output the ladder-matched file in csv format with the same filename
 
 >for(i in 1:length(my.lad)){
-
->	write.table(data.frame(my.lad[[i]]), gsub(".fsa", ".csv", names(my.lad)[i]), quote=T, sep=',', col.names=TRUE)
-
+>>	write.table(data.frame(my.lad[[i]]), gsub(".fsa", ".csv", names(my.lad)[i]), quote=T, sep=',', col.names=TRUE)
 >}
 
-2. Use python to continue development
+>(bad codelapply(my.lad, function(x) write.table(data.frame(x), 'test.csv',quote=T  , append=T, sep=',',col.names=TRUE)))
+
+
+2. Use Python to continue development
