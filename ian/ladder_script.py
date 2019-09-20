@@ -2,7 +2,7 @@ from Bio import SeqIO
 from matplotlib import pyplot as plt
 from collections import defaultdict
 import numpy as np
-from findpeaks import findpeaks
+import findpeaks
 from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import PolynomialFeatures
 import math
@@ -21,7 +21,8 @@ Liz_500 = [35, 50, 75, 100, 139, 150, 160, 200, 250, 300, 340, 350, 400, 450, 49
 for i in LIZ_500:
 	liz_500.append(math.log(i))
 
-record = SeqIO.read('A_GUI_12_1.fsa', 'abi')
+gregdirectory = "/home/bo/PGC/microsat/microsat_code/testdata/"
+record = SeqIO.read(gregdirectory+'A_GUI_12_1.fsa', 'abi')
 trace = defaultdict(list)
 
 for c in channels:
@@ -84,9 +85,15 @@ model = LinearRegression().fit(x, y)
 y_pred = model.intercept_ + model.coef_ * 3024
 print(y_pred)
 
+###ratio = index/bp ==> bp = index/ratio ==> index = bp*ratio
+
+ratio_pred = 3024 /10.98 # bp = index/ratio
+print(ratio_pred)
+
 # plt.plot(ind, LIZ_500, 'ro')
 # plt.ylabel('Ladder fragments (in bp)')
 # plt.show()
+
 
 # 3024 - True(207 bp)
 # 3482 - True(248 bp)

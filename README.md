@@ -4,12 +4,13 @@ Ian Francine Demavivas
 Galileo Gregory Abrasaldo II
 Kenneth Kim
 
-## Intended Pipeline
-A. Use Fragman R Library to match .fsa file and calibrate with ladder
+# Intended Pipeline
+## A. Use Fragman R Library to match .fsa file and calibrate with ladder
 *from Fragman documentation https://cran.r-project.org/web/packages/Fragman/Fragman.pdf*
 
-1. Assign the directory path.
+1. Load Fragman and assign the directory path.  
 
+>library(Fragman)  
 >folder <- "~/myfolder"  
 
 2. Store the fragment data using the storing.inds() function. set channels=5 since we are using the LIZ-500 dye.  
@@ -26,13 +27,13 @@ A. Use Fragman R Library to match .fsa file and calibrate with ladder
 
 4. Output the ladder-matched file in csv format with the same filename  
 
->for(i in 1:length(matched.lad)){
->	write.table(data.frame(matched.lad[[i]]), gsub(".fsa", ".csv", names(matched.lad)[i]), quote=T, sep=',', col.names=TRUE)
+>for(i in 1:length(matched.lad)){  
+>	write.table(data.frame(matched.lad[[i]]), gsub(".fsa", ".csv", names(matched.lad)[i]), quote=T, sep=',', col.names=TRUE)  
 >}  
-To visualize the output, adjust the channels and thresh accordingly:
+To visualize the output, adjust the channels and thresh accordingly:  
 >overview2(my.inds=my.fragments, channel = 2:3, ladder=matched.ladder, init.thresh=5000)
 
 >(bad codelapply(matched.lad, function(x) write.table(data.frame(x), 'test.csv',quote=T  , append=T, sep=',',col.names=TRUE)))
 
 
-B. Use Python to continue development
+## B. Use Python to continue development
