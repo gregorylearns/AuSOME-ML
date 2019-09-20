@@ -27,10 +27,10 @@ A. Use Fragman R Library to match .fsa file and calibrate with ladder
 4. Output the ladder-matched file in csv format with the same filename  
 
 >for(i in 1:length(matched.lad)){
->>	write.table(data.frame(matched.lad[[i]]), gsub(".fsa", ".csv", names(matched.lad)[i]), quote=T, sep=',', col.names=TRUE)
->}
-
->overview2(my.inds=my.plants, channel = 2:3, ladder=matched.ladder, init.thresh=5000)
+>	write.table(data.frame(matched.lad[[i]]), gsub(".fsa", ".csv", names(matched.lad)[i]), quote=T, sep=',', col.names=TRUE)
+>}  
+To visualize the output, adjust the channels and thresh accordingly:
+>overview2(my.inds=my.fragments, channel = 2:3, ladder=matched.ladder, init.thresh=5000)
 
 >(bad codelapply(matched.lad, function(x) write.table(data.frame(x), 'test.csv',quote=T  , append=T, sep=',',col.names=TRUE)))
 
