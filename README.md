@@ -2,32 +2,37 @@
 
 Ian Francine Demavivas
 Galileo Gregory Abrasaldo II
-
-Never gonna give you up!
-
-
+Kenneth Kim
 
 ## Intended Pipeline
-1. Use Fragman R Library to match .fsa file and calibrate with ladder
+A. Use Fragman R Library to match .fsa file and calibrate with ladder
 *from Fragman documentation https://cran.r-project.org/web/packages/Fragman/Fragman.pdf*
 
->folder <- "~/myfolder"
- 
->my.plants <- storing.inds(folder)
+1. Assign the directory path.
 
->class(my.plants) <- "fsa_stored"
+>folder <- "~/myfolder"  
 
-#Match your ladder
+2. Store the fragment data using the storing.inds() function. set channels=5 since we are using the LIZ-500 dye.  
 
->my.ladder <- c(35, 50, 75, 100, 139, 150, 160, 200, 250, 300, 340, 350, 400, 450, 490, 500)
+>my.fragments <- storing.inds(folder,channels=5)  
+>  
+>class(my.fragments) <- "fsa_stored"
 
-#Output the ladder-matched file in csv format with the same filename
+3. Match your ladder  
 
->for(i in 1:length(my.lad)){
->>	write.table(data.frame(my.lad[[i]]), gsub(".fsa", ".csv", names(my.lad)[i]), quote=T, sep=',', col.names=TRUE)
+>matched.ladder <- c(35, 50, 75, 100, 139, 150, 160, 200, 250, 300, 340, 350, 400, 450, 490, 500) 
+>ladder.info.attach(stored=my.fragments, ladder=matched.ladder)  
+>matched.lad <- list.data.covarrubias #this is where the matched ladder data is stored  
+
+4. Output the ladder-matched file in csv format with the same filename  
+
+>for(i in 1:length(matched.lad)){
+>>	write.table(data.frame(matched.lad[[i]]), gsub(".fsa", ".csv", names(matched.lad)[i]), quote=T, sep=',', col.names=TRUE)
 >}
 
->(bad codelapply(my.lad, function(x) write.table(data.frame(x), 'test.csv',quote=T  , append=T, sep=',',col.names=TRUE)))
+>overview2(my.inds=my.plants, channel = 2:3, ladder=matched.ladder, init.thresh=5000)
+
+>(bad codelapply(matched.lad, function(x) write.table(data.frame(x), 'test.csv',quote=T  , append=T, sep=',',col.names=TRUE)))
 
 
-2. Use Python to continue development
+B. Use Python to continue development
