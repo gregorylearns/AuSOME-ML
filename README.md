@@ -19,7 +19,7 @@ Kenneth Kim
 >  
 >class(my.fragments) <- "fsa_stored"
 
-3. Match your ladder  
+3. Match your ladder  with LIZ-500 standard
 
 >matched.ladder <- c(35, 50, 75, 100, 139, 150, 160, 200, 250, 300, 340, 350, 400, 450, 490, 500) 
 >ladder.info.attach(stored=my.fragments, ladder=matched.ladder)  
@@ -29,8 +29,10 @@ Kenneth Kim
 
 >for(i in 1:length(matched.lad)){  
 >	write.table(data.frame(matched.lad[[i]]), gsub(".fsa", ".csv", names(matched.lad)[i]), quote=T, sep=',', col.names=TRUE)  
->}  
+>} 
+
 To visualize the output, adjust the channels and thresh accordingly:  
+
 >overview2(my.inds=my.fragments, channel = 2:3, ladder=matched.ladder, init.thresh=5000)
 
 >(bad codelapply(matched.lad, function(x) write.table(data.frame(x), 'test.csv',quote=T  , append=T, sep=',',col.names=TRUE)))
