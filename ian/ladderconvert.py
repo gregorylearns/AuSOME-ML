@@ -81,7 +81,8 @@ def bp_index(bp,DataFrame=ladder_dataframe()):
 		i+=1
 
 
-print(bp_index(bp = 248))
+print(bp_index(bp = 206.739))
+print(index_bp(ind=3024 ))
 
 
 ##supposed single function method for all
