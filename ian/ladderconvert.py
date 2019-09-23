@@ -8,13 +8,8 @@ test_file = "A_GUI_12_1.csv"
 
 def ladder_dataframe(csvdir=test_dir,file=test_file):
 	dataframe = pd.read_csv(csvdir+file, delimiter=',')
-
 	#because i dont know how to iterate through panda columns yet
 	#update when i know how to iterate through panda columns
-
-	#new solution
-
-
 	##works
 	pos = list(dataframe[['pos'][0]])
 	wei = list(dataframe[['wei'][0]])
@@ -35,7 +30,7 @@ def ladder_dataframe(csvdir=test_dir,file=test_file):
 
 # print(ladder_dataframe())	
 
-def index_bp(ind = 0,DataFrame=ladder_dataframe()):
+def index_bp(ind,DataFrame=ladder_dataframe()):
 	
 	poslist = list(DataFrame[['pos'][0]])
 	weilist = list(DataFrame[['wei'][0]])
@@ -54,21 +49,42 @@ def index_bp(ind = 0,DataFrame=ladder_dataframe()):
 		elif ind < poslist[i]:
 	
 			bp_location = (((ind - poslist[i-1])/dellist[i]) + weilist[i-1])
-			# print("{} {} {} {}".format(ind,poslist[i-1],dellist[i],weilist[i-1]))
+			# print("{} {} {} {}".format(ind,poslist[i-1],dellist[i],weilist[i-1])) # for debugging
 			return(bp_location)
 			break
 		i+=1
 
+# print(index_bp(ind=6390))
 
-print(index_bp(ind=6390))
+def bp_index(bp,DataFrame=ladder_dataframe()):
+	
+	poslist = list(DataFrame[['pos'][0]])
+	weilist = list(DataFrame[['wei'][0]])
+	dellist = list(DataFrame[['delta'][0]])	
+	print("the bp is: " + str(bp))
+	i = 0
+	while i < len(weilist):
+		#check if bp is equal to the calibrated ladder
+		#and return the calibrated bp location
+		# print(i)
+		if bp == weilist[i]:
+			return(ind)
+			#the function ends
+			break
+		#convert using the formula: in = (bp - wei[i-1]) * delta[i] + poslist[i-1]
+		elif bp < weilist[i]:
+	
+			in_location = ((bp - weilist[i-1]) * dellist[i]) + poslist[i-1]
+			# print("{} {} {} {}".format(bp,weilist[i-1],dellist[i],poslist[i-1])) # for debugging
+			return(in_location)
+			break
+		i+=1
 
 
+print(bp_index(bp = 248))
 
 
-
-
-
-
+##supposed single function method for all
 # def bpindexconvert(bp=0,index=0):
 # 	#open the data frame
 # 	deltaframe = ladder_dataframe()
