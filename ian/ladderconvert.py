@@ -3,7 +3,7 @@
 ## To do: efficiently use pandas instad of lists
 ## To do: support list import for data
 import pandas as pd
-import simpleconversionscript
+import simpleconversionscript # for the test array
 
 test_dir = "/home/bo/PGC/microsat/TestData/Plate1/mini/"
 test_file = "A_GUI_12_1.csv"
@@ -35,6 +35,9 @@ def ladder_dataframe(csvdir=test_dir,file=test_file):
 
 
 
+
+
+
 def index_bp(channel,DataFrame):
 	"""
 	Uses the delta value to convert index values into the base pairs value
@@ -63,12 +66,13 @@ def index_bp(channel,DataFrame):
 
 
 	print("the length of the output list is: %s" % len(output))
-	return(output)
+	return(output) #a list containing converted index to bp
+
 
 
 index_bp(simpleconversionscript.testarray(),DataFrame=ladder_dataframe())
 # index_bp(3024,DataFrame=ladder_dataframe())
-print(simpleconversionscript.trace['DATA1'])
+
 
 
 def bp_index(bp,DataFrame):
