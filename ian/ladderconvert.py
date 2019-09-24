@@ -46,10 +46,8 @@ def index_bp(channel,DataFrame):
 	poslist = list(DataFrame[['pos'][0]]) #Because i dont know how to iterate pandas
 	weilist = list(DataFrame[['wei'][0]])
 	dellist = list(DataFrame[['delta'][0]])	
-	print(DataFrame)
 
 	output = list()
-	print("the length of channel is %s" % len(channel))
 
 	exact = 1
 	for ind in range(1,len(channel)+1):
@@ -68,9 +66,6 @@ def index_bp(channel,DataFrame):
 	print("the length of the output list is: %s" % len(output))
 	return(output) #a list containing converted index to bp
 
-testlist = index_bp(simpleconversionscript.testarray(),DataFrame=ladder_dataframe())
-with open("outputfile.txt","w+") as outputfile:
-	outputfile.writelines( "%s\n" % item for item in testlist)
 
 
 # index_bp(3024,DataFrame=ladder_dataframe())
@@ -128,6 +123,9 @@ def bp_index(bp,DataFrame):
 
 
 		
+# testlist = index_bp(simpleconversionscript.testarray(),DataFrame=ladder_dataframe())
+# with open("outputfile.txt","w+") as outputfile:
+# 	outputfile.writelines( "%s\n" % item for item in testlist)
 
 
 
