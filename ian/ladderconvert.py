@@ -1,5 +1,9 @@
 #ladder convert py
 #Greg, 9.20.19 4pm
+## To do: efficiently use pandas instad of lists
+## To do: support list import for data
+
+
 import pandas as pd
 
 ## 
@@ -26,6 +30,7 @@ def ladder_dataframe(csvdir=test_dir,file=test_file):
 	    i +=1
 
 	deltaframe = pd.DataFrame(list(zip(pos,wei,delta)),columns = ['pos','wei','delta'])
+	#returns a column of values which are the ratio of pos and wei.
 	return(deltaframe)
 
 # print(ladder_dataframe())	
