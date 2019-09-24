@@ -38,37 +38,31 @@ def ladder_dataframe(csvdir=test_dir,file=test_file):
 def index_bp(channel,DataFrame):
 	"""
 	Uses the delta value to convert index values into the base pairs value
-	batch mode, insert an array here, preferrably a channel 
+	currently only in batch mode, insert an array here, preferrably a channel 
 	"""
 	poslist = list(DataFrame[['pos'][0]]) #Because i dont know how to iterate pandas
 	weilist = list(DataFrame[['wei'][0]])
 	dellist = list(DataFrame[['delta'][0]])	
 	print(DataFrame)
-	if isinstance(channel,int) == True:
-		channel = [channel]
 
 	output = list()
+	print("the length of channel is %s" % len(channel))
 
-	for c in range(len(channel)):
-		if c < poslist[1]-1:
+	exact = 1
+	for ind in range(1,len(channel)+1):
+		if ind < poslist[1]:
 			output.append(0)
-		else: 
-			i = 0
-			while i < len(poslist):
-				#check if index is equal to the calibrated ladder
-				#and return the calibrated bp location
-				if c == poslist[i]:
-					print("{} {}".format(poslist[i],weilist[i]))
-					output.append(weilist[i])
-					pass
-				
-				elif c < poslist[i]: #convert using the formula: bp = ((i - pos(n-1))/delta(n))+wei(n-1)
-					bp_location = (((c - poslist[i-1])/dellist[i]) + weilist[i-1])
-					# print("{} {} {} {}".format(c ,poslist[i-1],dellist[i],weilist[i-1])) # debugging
-					output.append(bp_location)
-					pass
+		elif ind == poslist[exact]:
+			output.append(weilist[exact])
+			exact+=1
+			if exact == 16: exact = 15 #because the index falls out of range at the last loop
+		else:
+			bp_location = (((ind - poslist[exact-1])/dellist[exact]) + weilist[exact-1])
+			# print("{} {} {} {}".format(c ,poslist[i-1],dellist[i],weilist[i-1])) # debugging
+			output.append(bp_location)
 
-				i+=1
+
+	print("the length of the output list is: %s" % len(output))
 	return(output)
 
 
