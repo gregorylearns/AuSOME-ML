@@ -66,10 +66,9 @@ def index_bp(channel,DataFrame):
 	return(output)
 
 
-outlist =index_bp(simpleconversionscript.testarray(),DataFrame=ladder_dataframe())
-with open("output.txt",'w+') as file:
-	file.writelines( "%s\n" % item for item in outlist)
+index_bp(simpleconversionscript.testarray(),DataFrame=ladder_dataframe())
 # index_bp(3024,DataFrame=ladder_dataframe())
+print(simpleconversionscript.trace['DATA1'])
 
 
 def bp_index(bp,DataFrame):
