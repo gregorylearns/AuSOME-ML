@@ -53,7 +53,7 @@ def index_bp(channel,DataFrame):
 
 	exact = 1
 	for ind in range(1,len(channel)+1):
-		if ind < poslist[1]:
+		if ind < poslist[0]:
 			output.append(0)
 		elif ind == poslist[exact]:
 			output.append(weilist[exact])
@@ -68,9 +68,11 @@ def index_bp(channel,DataFrame):
 	print("the length of the output list is: %s" % len(output))
 	return(output) #a list containing converted index to bp
 
+testlist = index_bp(simpleconversionscript.testarray(),DataFrame=ladder_dataframe())
+with open("outputfile.txt","w+") as outputfile:
+	outputfile.writelines( "%s\n" % item for item in testlist)
 
 
-index_bp(simpleconversionscript.testarray(),DataFrame=ladder_dataframe())
 # index_bp(3024,DataFrame=ladder_dataframe())
 
 
