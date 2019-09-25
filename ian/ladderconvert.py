@@ -21,19 +21,30 @@ def ladder_dataframe(csvdir=test_dir,file=test_file):
 	delta = []
 	i = 0
 
-	while i < len(pos):
-	    if i == 0:
-	        i +=1
-	        delta.append(0)
-	        continue 
-	    a= (pos[i]-pos[i-1])/(wei[i]-wei[i-1])
-	    delta.append(a)
-	    i +=1
+	# ###list implementation
+	# while i < len(pos):
+	#     if i == 0:
+	#         i +=1
+	#         delta.append(0)
+	#         continue 
+	#     a= (pos[i]-pos[i-1])/(wei[i]-wei[i-1])
+	#     delta.append(a)
+	#     i +=1
+
+	# ###pandas implementation
+	# while i < len(dataframe[["pos"]]):
+	#     if i == 0:
+	#         i +=1
+	#         delta.append(0)
+	#         continue 
+	#     a= (dataframe.iat[i,0]-dataframe.iat[i-1,0])/(dataframe.iat[i,2]-dataframe.iat[i-1,2])
+	#     delta.append(a)
+	#     i +=1
 
 	deltaframe = pd.DataFrame(list(zip(pos,wei,delta)),columns = ['pos','wei','delta'])
 	return(deltaframe) #returns a table of values that contain 'pos', 'wei', and 'delta'
 
-
+print(ladder_dataframe())
 
 
 
