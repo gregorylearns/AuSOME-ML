@@ -10,6 +10,9 @@ import pandas as pd
 test_dir = "/home/bo/PGC/microsat/TestData/Plate1/mini/"
 test_file = "A_GUI_12_1.fsa"
 
+test_dir_cor = "/home/bo/PGC/microsat/TestData/BRC_Kim_Plate_4_190613/"
+test_file_cor = "A_COR_12_1_Hos.fsa"
+
 def fsatopandas():
 	"""
 	Reads the fsa file using Biopython and stores the raw data of the channels 
@@ -19,7 +22,7 @@ def fsatopandas():
 	for more information on the abif file system
 	https://projects.nfstc.org/workshops/resources/articles/ABIF_File_Format.pdf
 	"""
-	abif_raw = SeqIO.read(test_dir+test_file, 'abi')
+	abif_raw = SeqIO.read(test_dir_cor+test_file_cor, 'abi')
 	abif_data = pd.DataFrame()
 
 
@@ -49,8 +52,8 @@ def laddermatch():
 
 	#gives slightly different results, update parameters or the findpeaks function
 	ind_pos = list(findpeaks.findpeaks(data_105, spacing=50, limit=200))
-	# hei = [data_105[x] for x in indexes] #no need to ouput on table, just a nice to have
-
+	# hei = [data_105[x] for x in ind_pos] #no need to ouput on table, just a nice to have
+	# print(hei)
 	for i in range(len(ind_pos) - len(liz_500)):
 		"""
 		Remove the first n elements so that index length = liz length, with the 
@@ -69,10 +72,10 @@ def laddermatch():
 	    delta.append(d)
 	    i +=1
 
-
+	#exactly the same with the output of ladderconvert.ladder_dataframe function
 	deltaframe = pd.DataFrame(list(zip(ind_pos,liz_500,delta)),columns = ['pos','wei','delta'])
 	return(deltaframe)
 
-
-
 print(laddermatch())
+
+# print(laddermatch())

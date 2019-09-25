@@ -30,7 +30,7 @@ def findpeaks(data, spacing=1, limit=None):
         h_c = x[start : start + length]  # central
         start = spacing + s + 1
         h_a = x[start : start + length]  # after
-        peak_candidate = np.logical_and(peak_candidate, np.logical_and(h_c > h_b, h_c > h_a))
+        peak_candidate = np.logical_and(peak_candidate, np.logical_and(h_c >= h_b, h_c > h_a))
 
     ind = np.argwhere(peak_candidate)
     ind = ind.reshape(ind.size)
