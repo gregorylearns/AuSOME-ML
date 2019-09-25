@@ -50,7 +50,7 @@ def laddermatch():
 	liz_500 = [35, 50, 75, 100, 139, 150, 160, 200, 250, 300, 340, 350, 400, 450, 490, 500]
 	data_105 = list(abif_data["DATA105"])
 
-	#gives slightly different results, update parameters or the findpeaks function
+	#gives different results, update parameters or the findpeaks function
 	ind_pos = list(findpeaks.findpeaks(data_105, spacing=50, limit=200))
 	# hei = [data_105[x] for x in ind_pos] #no need to ouput on table, just a nice to have
 	# print(hei)

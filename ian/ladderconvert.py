@@ -13,6 +13,8 @@ def ladder_dataframe(csvdir=test_dir,file=test_file):
 	Creates a dataframe from the CSV file from fragman, and creates a column named delta.
 	Delta is the ratio of the changes in index('pos')/changes in stdard('wei')
 	Delta(ratio) is useful in the next two functions that converts index to bp and vice versa.
+
+	This is a 'from Fragman' implementation, laddermatch is our own implementation
 	"""
 	dataframe = pd.read_csv(csvdir+file, delimiter=',')
 	#because i dont know how to iterate through panda columns yet && update when I do
@@ -21,34 +23,28 @@ def ladder_dataframe(csvdir=test_dir,file=test_file):
 	delta = []
 	i = 0
 
-	# ###list implementation
-	# while i < len(pos):
-	#     if i == 0:
-	#         i +=1
-	#         delta.append(0)
-	#         continue 
-	#     a= (pos[i]-pos[i-1])/(wei[i]-wei[i-1])
-	#     delta.append(a)
-	#     i +=1
-
-	###pandas implementation
-	while i < len(dataframe[["pos"]]):
+	###list implementation is about 4x than the pandas implementation.
+	while i < len(pos):
 	    if i == 0:
 	        i +=1
 	        delta.append(0)
 	        continue 
-	    a= (dataframe.iat[i,0]-dataframe.iat[i-1,0])/(dataframe.iat[i,2]-dataframe.iat[i-1,2])
+	    a= (pos[i]-pos[i-1])/(wei[i]-wei[i-1])
 	    delta.append(a)
 	    i +=1
 
+	# ###pandas implementation
+	# while i < len(dataframe[["pos"]]):
+	#     if i == 0:
+	#         i +=1
+	#         delta.append(0)
+	#         continue 
+	#     a= (dataframe.iat[i,0]-dataframe.iat[i-1,0])/(dataframe.iat[i,2]-dataframe.iat[i-1,2])
+	#     delta.append(a)
+	#     i +=1
+
 	deltaframe = pd.DataFrame(list(zip(pos,wei,delta)),columns = ['pos','wei','delta'])
 	return(deltaframe) #returns a table of values that contain 'pos', 'wei', and 'delta'
-
-import time
-start = time.time()
-ladder_dataframe()
-end = time.time()
-print("Took %f ms" % ((end - start)* 1000.0))
 
 
 
