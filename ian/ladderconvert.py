@@ -5,47 +5,6 @@
 import pandas as pd
 import simpleconversionscript # for the test array
 
-test_dir = "/home/bo/PGC/microsat/TestData/Plate1/mini/"
-test_file = "A_GUI_12_1.csv"
-
-def ladder_dataframe(csvdir=test_dir,file=test_file): 
-	"""
-	Creates a dataframe from the CSV file from fragman, and creates a column named delta.
-	Delta is the ratio of the changes in index('pos')/changes in stdard('wei')
-	Delta(ratio) is useful in the next two functions that converts index to bp and vice versa.
-
-	This is a 'from Fragman' implementation, laddermatch is our own implementation
-	"""
-	dataframe = pd.read_csv(csvdir+file, delimiter=',')
-	#because i dont know how to iterate through panda columns yet && update when I do
-	pos = list(dataframe[['pos'][0]])
-	wei = list(dataframe[['wei'][0]])
-	delta = []
-	i = 0
-
-	###list implementation is about 4x than the pandas implementation.
-	while i < len(pos):
-	    if i == 0:
-	        i +=1
-	        delta.append(0)
-	        continue 
-	    a= (pos[i]-pos[i-1])/(wei[i]-wei[i-1])
-	    delta.append(a)
-	    i +=1
-
-	# ###pandas implementation
-	# while i < len(dataframe[["pos"]]):
-	#     if i == 0:
-	#         i +=1
-	#         delta.append(0)
-	#         continue 
-	#     a= (dataframe.iat[i,0]-dataframe.iat[i-1,0])/(dataframe.iat[i,2]-dataframe.iat[i-1,2])
-	#     delta.append(a)
-	#     i +=1
-
-	deltaframe = pd.DataFrame(list(zip(pos,wei,delta)),columns = ['pos','wei','delta'])
-	return(deltaframe) #returns a table of values that contain 'pos', 'wei', and 'delta'
-
 
 
 def index_bp(channel,DataFrame):
@@ -73,12 +32,11 @@ def index_bp(channel,DataFrame):
 			output.append(bp_location)
 
 
-	print("the length of the output list is: %s" % len(output))
 	return(output) #a list containing converted index to bp
 
 
 
-# index_bp(3024,DataFrame=ladder_dataframe())
+print(index_bp([3024],DataFrame=ladder_dataframe()))
 
 
 
