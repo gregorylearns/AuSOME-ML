@@ -6,7 +6,6 @@ import pandas as pd
 import simpleconversionscript # for the test array
 
 
-
 def index_bp(channel,DataFrame):
 	"""
 	Uses the delta value to convert index values into the base pairs value
@@ -70,24 +69,6 @@ def bp_index(bp,DataFrame):
 
 
 # print(bp_index(bp = 206.739,DataFrame=my_dataframe))
-
-
-##supposed single function method for all
-# def bpindexconvert(bp=0,index=0):
-# 	#open the data frame
-# 	deltaframe = ladder_dataframe()
-# 	#check if bp or index has values
-# 	#if both has values, return error
-# 	#if bp, convert to index, if index convert to bp
-# 	if bp > 0 & index > 0:
-# 		#print error and break
-# 		return()
-# 	elif bp > 0:
-# 		#convert bp to index
-# 		return()
-# 	elif index > 0:
-# 		#convert index to bp
-# 		return()
 
 
 		
