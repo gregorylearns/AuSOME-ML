@@ -59,6 +59,7 @@ def gen_deltatable():
 		"""
 		Remove the first n elements so that index length = liz length, with the 
 		end of the list as the standard
+		Crude implementation and very likely with wrong calls
 		"""
 		ind_pos.pop(0)
 
