@@ -19,12 +19,13 @@ def plotfsa(file="A_GUI_12_2.fsa"):
 
 	# print(record.annotations.keys())
 
-	plt.plot(trace['DATA1'], color='blue')
-	plt.plot(trace['DATA2'], color='red')
-	plt.plot(trace['DATA3'], color='green')
-	plt.plot(trace['DATA4'], color='yellow')
-	plt.plot(trace['DATA105'], color='black')
-
+	plt.plot(trace['DATA1'], color='blue', label="6FAM")
+	plt.plot(trace['DATA2'], color='red' , label="VIC")
+	plt.plot(trace['DATA3'], color='green', label ="NED")
+	plt.plot(trace['DATA4'], color='yellow', label="PET")
+	plt.plot(trace['DATA105'], color='black', label="LIZ 500")
+	
+	plt.legend()
 	plt.ylim((0,10000))
 	plt.show()
 
