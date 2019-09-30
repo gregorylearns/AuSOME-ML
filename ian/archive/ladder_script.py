@@ -2,7 +2,6 @@ from Bio import SeqIO
 from matplotlib import pyplot as plt
 from collections import defaultdict
 import numpy as np
-import pandas as pd
 import math
 from ladder_fit import convert_to_bp, convert_to_index, find_lower, find_upper
 
@@ -15,52 +14,42 @@ e = 'DATA105'
 channels = [a, b, c, d, e]
 dye = [500, 490, 450, 400, 350, 340, 300, 250, 200, 160, 150, 139, 100, 75, 50, 35]
 
-record = SeqIO.read('A_ROM_12_21_Hos.fsa', 'abi')
+record = SeqIO.read('A_COR_12_1_Hos.fsa', 'abi')
 trace = defaultdict(list)
 
 for c in channels:
 	trace[c] = record.annotations['abif_raw'][c]
 
-plt.plot(trace[a], color='blue')
-plt.plot(trace[b], color='red')
-plt.plot(trace[c], color='green')
-plt.plot(trace[d], color='yellow')
-plt.plot(trace[e], color='black')
+# plt.plot(trace[a], color='blue')
+# plt.plot(trace[b], color='red')
+# plt.plot(trace[c], color='green')
+# plt.plot(trace[d], color='yellow')
+# plt.plot(trace[e], color='black')
 
-plt.xlabel('index', fontsize=16)
-plt.ylabel('RFU (Relative Fluorescent Units)', fontsize=16)
-
-plt.show()
-
+# plt.show()
 # converted_bp = convert_to_bp(1370, record.annotations['abif_raw'][e], dye)
 # print(converted_bp)
 
-# converted_index = convert_to_index(240.27, record.annotations['abif_raw'][e], dye)
+# converted_index = convert_to_index(240.27, record.annotations['abif_raw'][e])
 # print(converted_index)
-
-alelle = 250
-index = 3472
-# alelle = 272
-# index = 3696
+alelle = 288
 height = []
 index_of_peaks = []
 data1 = list(record.annotations['abif_raw'][a])
 
-converted_index = convert_to_bp(index, record.annotations['abif_raw'][e], dye)
-print(converted_index)
+for c in range(find_lower(record.annotations['abif_raw'][e], dye), find_upper(record.annotations['abif_raw'][e], dye)):
+	converted_bp = convert_to_bp(c, record.annotations['abif_raw'][e], dye)
+	in_range = converted_bp >= alelle - 1 and converted_bp <= alelle + 1
+	if in_range:
+		index_of_peaks.append(c)
+		height.append(data1[c])
+	elif converted_bp > alelle:
+		break
 
-# for c in range(find_lower(record.annotations['abif_raw'][e], dye), find_upper(record.annotations['abif_raw'][e], dye)):
-# 	converted_bp = convert_to_bp(c, record.annotations['abif_raw'][e], dye)
-# 	in_range = converted_bp >= alelle - 1.5 and converted_bp <= alelle + 1.5
-# 	if in_range:
-# 		index_of_peaks.append(c)
-# 		height.append(data1[c])
-# 	elif converted_bp > alelle + 1.5:
-# 		break
-
-# print(height)
-# print(index_of_peaks)
-# print(f'the peak of the alelle with length {alelle} bp is: {max(height)}')
+print(height)
+print(index_of_peaks)
+print(max(height))
+print(convert_to_bp(1175, record.annotations['abif_raw'][e], dye))
 
 # Make negative values in array zero
 # data_105 = list(record.annotations['abif_raw'][e])
