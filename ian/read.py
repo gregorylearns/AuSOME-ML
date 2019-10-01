@@ -8,7 +8,7 @@ from ladder_fit import convert_to_bp, convert_to_index, find_lower, find_upper
 from tqdm import tqdm
 
 my_dir = "/home/bo/PGC/microsat/testdata/training/GetHeight/"
-file = pd.read_csv(my_dir+'HSC24-A_Channel2.csv')
+file = pd.read_csv(my_dir+'HSC20_D_Channel4.csv')
 a = 'DATA1'
 b = 'DATA2'
 c = 'DATA3'
@@ -46,7 +46,7 @@ for i in tqdm(range(len(file))):
 
 		height = []
 		index_of_peaks = []
-		data1 = list(record.annotations['abif_raw'][b])
+		data1 = list(record.annotations['abif_raw'][d])
 
 		for x in range(find_lower(record.annotations['abif_raw'][e], dye), find_upper(record.annotations['abif_raw'][e], dye)):
 			# print("#",end='')
@@ -97,4 +97,5 @@ file["Height_column2"] = pd.Series(new_values2)
 file["Index_column3"] = pd.Series(new_values3)
 file["Index_column4"] = pd.Series(new_values4)
 
-file.to_csv('/home/bo/PGC/microsat/testdata/training/GetHeight/HSC24-A_Channel2_HeightandIndex.csv')
+file.to_csv(my_dir+'HSC20_D_Channel4_DATA4.csv')
+print(my_dir+'HSC20_D_Channel4_DATA4.csv Saved')
