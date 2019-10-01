@@ -5,8 +5,10 @@ import numpy as np
 import pandas as pd
 import math
 from ladder_fit import convert_to_bp, convert_to_index, find_lower, find_upper
+from tqdm import tqdm
 
-file = pd.read_csv('Channel1.csv')
+my_dir = "/home/bo/PGC/microsat/testdata/training/GetHeight/"
+file = pd.read_csv(my_dir+'HSC24-A_Channel2.csv')
 a = 'DATA1'
 b = 'DATA2'
 c = 'DATA3'
@@ -19,7 +21,7 @@ new_values2 = []
 new_values3 = []
 new_values4 = []
 
-for i in range(len(file)):
+for i in tqdm(range(len(file))):
 	filename = file.iat[i, 0]
 	alelle1 = file.iat[i, 1]
 	alelle2 = file.iat[i, 2]
@@ -39,12 +41,12 @@ for i in range(len(file)):
 		elif filename[4] == 'T':
 			filename = filename.replace('_TIG', '')
 		abif_file = 'A_' + filename + '.fsa'
-		record = SeqIO.read(abif_file, 'abi')
+		record = SeqIO.read(my_dir+abif_file, 'abi')
 		print('\nopening fsa file ({}/{}): {}'.format(i,len(file),abif_file))
 
 		height = []
 		index_of_peaks = []
-		data1 = list(record.annotations['abif_raw'][a])
+		data1 = list(record.annotations['abif_raw'][b])
 
 		for x in range(find_lower(record.annotations['abif_raw'][e], dye), find_upper(record.annotations['abif_raw'][e], dye)):
 			# print("#",end='')
@@ -55,23 +57,30 @@ for i in range(len(file)):
 				height.append(data1[x])
 			elif converted_bp > alelle1:
 				break
+
+
 		new_values1.append(max(height))
 		new_values3.append(index_of_peaks[height.index(max(height))])
 
-		height = []
-		index_of_peaks = []
+		if alelle1 == alelle2:
+			new_values2.append(max(height))
+			new_values4.append(index_of_peaks[height.index(max(height))])
 
-		for x in range(find_lower(record.annotations['abif_raw'][e], dye), find_upper(record.annotations['abif_raw'][e], dye)):
-			# print("#",end='')
-			converted_bp = convert_to_bp(x, record.annotations['abif_raw'][e], dye)
-			in_range = converted_bp >= alelle2 - 1.5 and converted_bp <= alelle2 + 1.5
-			if in_range:
-				index_of_peaks.append(x)
-				height.append(data1[x])
-			elif converted_bp > alelle2:
-				break
-		new_values2.append(max(height))
-		new_values4.append(index_of_peaks[height.index(max(height))])
+		else: 
+			height = []
+			index_of_peaks = []
+
+			for x in range(find_lower(record.annotations['abif_raw'][e], dye), find_upper(record.annotations['abif_raw'][e], dye)):
+				# print("#",end='')
+				converted_bp = convert_to_bp(x, record.annotations['abif_raw'][e], dye)
+				in_range = converted_bp >= alelle2 - 1.5 and converted_bp <= alelle2 + 1.5
+				if in_range:
+					index_of_peaks.append(x)
+					height.append(data1[x])
+				elif converted_bp > alelle2:
+					break
+			new_values2.append(max(height))
+			new_values4.append(index_of_peaks[height.index(max(height))])
 
 	else:
 		new_values1.append(float('nan'))
@@ -88,4 +97,4 @@ file["Height_column2"] = pd.Series(new_values2)
 file["Index_column3"] = pd.Series(new_values3)
 file["Index_column4"] = pd.Series(new_values4)
 
-file.to_csv('Height_and_Index.csv')
+file.to_csv('/home/bo/PGC/microsat/testdata/training/GetHeight/HSC24-A_Channel2_HeightandIndex.csv')

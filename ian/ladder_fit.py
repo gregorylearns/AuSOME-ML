@@ -86,7 +86,7 @@ def convert_to_bp(alelle, data, LIZ_500):
 	j = len(indexes) - 1
 	k = 0
 
-	print(indexes)
+	# print(indexes)
 
 	while j >= 0:
 		if k == 15:
@@ -114,7 +114,7 @@ def convert_to_bp(alelle, data, LIZ_500):
 			j = next_index
 			k += 1
 	
-	print(ind)
+	# print(ind)
 
 	for c in range(0, 16):
 		if alelle > ind[c] or alelle == ind[c]:
@@ -133,7 +133,7 @@ def convert_to_index(bp, data, LIZ_500):
 	j = len(indexes) - 1
 	k = 0
 
-	print(indexes)
+	# print(indexes)
 
 	while j >= 0:
 		if k == 15:
@@ -162,7 +162,7 @@ def convert_to_index(bp, data, LIZ_500):
 			j = next_index
 			k += 1
 
-	print(ind)
+	# print(ind)
 
 	for c in range(0, 16):
 		if bp > LIZ_500[c]:

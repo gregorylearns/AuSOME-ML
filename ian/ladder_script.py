@@ -15,16 +15,17 @@ e = 'DATA105'
 channels = [a, b, c, d, e]
 dye = [500, 490, 450, 400, 350, 340, 300, 250, 200, 160, 150, 139, 100, 75, 50, 35]
 
-record = SeqIO.read('A_ROM_12_21_Hos.fsa', 'abi')
+directory = "/home/bo/PGC/microsat/testdata/training/GetHeight/"
+record = SeqIO.read(directory+'A_CEB_12_32_Hos.fsa', 'abi')
 trace = defaultdict(list)
 
 for c in channels:
 	trace[c] = record.annotations['abif_raw'][c]
 
-plt.plot(trace[a], color='blue')
+# plt.plot(trace[a], color='blue')
 plt.plot(trace[b], color='red')
-plt.plot(trace[c], color='green')
-plt.plot(trace[d], color='yellow')
+# plt.plot(trace[c], color='green')
+# plt.plot(trace[d], color='yellow')
 plt.plot(trace[e], color='black')
 
 plt.xlabel('index', fontsize=16)
@@ -44,10 +45,13 @@ index = 3472
 # index = 3696
 height = []
 index_of_peaks = []
-data1 = list(record.annotations['abif_raw'][a])
+data1 = list(record.annotations['abif_raw'][b])
 
 converted_index = convert_to_bp(index, record.annotations['abif_raw'][e], dye)
 print(converted_index)
+
+print(find_lower(record.annotations['abif_raw'][e], dye))
+print(find_upper(record.annotations['abif_raw'][e], dye))
 
 # for c in range(find_lower(record.annotations['abif_raw'][e], dye), find_upper(record.annotations['abif_raw'][e], dye)):
 # 	converted_bp = convert_to_bp(c, record.annotations['abif_raw'][e], dye)
