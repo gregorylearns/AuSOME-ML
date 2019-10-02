@@ -8,13 +8,14 @@ from time import time
 
 def plotgraph():
 	my_dir = "/home/bo/PGC/microsat/testdata/training/GetHeight/"
-	filename = "A_COR_12_2_Hos.fsa"
+	filename = "A_ILO_12_25_Hos.fsa"
 
 	#Load Data from FSA file
 	record = SeqIO.read(my_dir+filename,"abi")
 	channeldata = record.annotations['abif_raw']['DATA4']
+	ladderdata = record.annotations['abif_raw']['DATA105']
 	
-	all_pk = fp.findpeaks(channeldata, spacing=5,limit=2000)
+	all_pk = fp.findpeaks(channeldata, spacing=15,limit=100)
 	all_pk_trim = [a for a in all_pk 
 					if a > 1500]
 
@@ -34,11 +35,13 @@ def plotgraph():
 		print("a= %s b=%s " % (a,b))		
 
 		segment = np.array(channeldata[a:b])
+		# segmentindex = np.array(range(a,b))
+
 		inv_segment = [x * -1 for x in segment]
 
 		# print(np.trapz(segment[27:75]))
-		fp_spacing = 5
-		fp_limit = 400
+		fp_spacing = 15
+		fp_limit = 100
 
 
 		pk_indexes = fp.findpeaks(segment, spacing=fp_spacing, limit=fp_limit)
@@ -83,6 +86,7 @@ def plotgraph():
 
 	#bottom
 	plt.subplot(2,1,2)
+	plt.plot(ladderdata,color='black',alpha=0.3)
 	plt.plot(channeldata)
 	plt.plot(all_pk_trim,all_pk_height,'+',color='black',markersize=5,label="Peaks")
 	plt.ylim(0,max(all_pk_height)+1000)
