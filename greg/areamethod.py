@@ -8,11 +8,11 @@ from time import time
 
 def plotgraph():
 	my_dir = "/home/bo/PGC/microsat/testdata/training/GetHeight/"
-	filename = "A_ILO_12_25_Hos.fsa"
+	filename = "A_COR_12_1_Hos.fsa"
 
 	#Load Data from FSA file
 	record = SeqIO.read(my_dir+filename,"abi")
-	channeldata = record.annotations['abif_raw']['DATA4']
+	channeldata = record.annotations['abif_raw']['DATA1']
 	ladderdata = record.annotations['abif_raw']['DATA105']
 	
 	all_pk = fp.findpeaks(channeldata, spacing=15,limit=100)
