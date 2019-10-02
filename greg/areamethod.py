@@ -8,9 +8,9 @@ from time import time
 
 def plot():
 	my_dir = "/home/bo/PGC/microsat/testdata/training/GetHeight/"
-	filename = "A_BOH_12_1.fsa"
+	filename = "A_BOH_12_12.fsa"
 
-	##Load Data from FSA file
+	#Load Data from FSA file
 	record = SeqIO.read(my_dir+filename,"abi")
 	trace = record.annotations['abif_raw']['DATA1']
 	
@@ -19,49 +19,70 @@ def plot():
 	plt.plot(trace)
 	plt.plot(all_pk,all_pk_height,'o')
 
-	seg_ranges = [[x-80,x+40] for x in all_pk_height]
+	print(all_pk)
 
-	# segment = np.array(trace[2100:2200])
-	# inv_segment = [x * -1 for x in segment]
-
-	# # print(np.trapz(segment[27:75]))
-	# fp_spacing = 5
-	# fp_limit = 400
-
-
-	# pk_indexes = fp.findpeaks(segment, spacing=fp_spacing, limit=fp_limit)
-	# pki_indexes = fp.findpeaks(inv_segment, spacing=fp_spacing, limit=-fp_limit)
+	seg_ranges = [[x-80,x+40] for x in all_pk]
 	
-	# ## Get the outside bounds of the peaks  
-	# pki_index_trim = []
-	# peakrange = range(min(pk_indexes), max(pk_indexes))
+
+	a = 2180
+	b = 2260
+
+	segment = np.array(trace[a:b])
+	inv_segment = [x * -1 for x in segment]
+
+	# print(np.trapz(segment[27:75]))
+	fp_spacing = 5
+	fp_limit = 400
+
+
+	pk_indexes = fp.findpeaks(segment, spacing=fp_spacing, limit=fp_limit)
+	pki_indexes = fp.findpeaks(inv_segment, spacing=fp_spacing, limit=-fp_limit)
 	
-	# for p in range(len(pki_indexes)):
-	# 	if pki_indexes[p] in peakrange or pki_indexes[p-1] in peakrange:
-	# 		pki_index_trim.append(pki_indexes[p])
-	# 	try:
-	# 		if pki_indexes[p+1] in peakrange:
-	# 			pki_index_trim.append(pki_indexes[p])
-	# 	except IndexError:
-	# 		pass
+	## Get the outside bounds of the peaks  
+	pki_index_trim = []
+	peakrange = range(min(pk_indexes), max(pk_indexes))
+	
+	for p in range(len(pki_indexes)):
+		if pki_indexes[p] in peakrange or pki_indexes[p-1] in peakrange:
+			pki_index_trim.append(pki_indexes[p])
+		try:
+			if pki_indexes[p+1] in peakrange:
+				pki_index_trim.append(pki_indexes[p])
+		except IndexError:
+			pass
+
+	pki_index_trim = list(dict.fromkeys(pki_index_trim))
+	print(pki_index_trim)
+	### end for calling and cleaning outside bounds of the peaks
 
 
-	# pk_height = [segment[x] for x in pk_indexes]
-	# pki_height = [segment[x] for x in pki_index_trim]
-	# #Labels for the graphs
-	# pk_height_label = str(len(pk_height))+" high peak(s)"
-	# pki_height_label = str(len(pki_height))+" low peak(s)"
+	pk_height = [segment[x] for x in pk_indexes]
+	pki_height = [segment[x] for x in pki_index_trim]
+	#Labels for the graphs
+	pk_height_label = str(len(pk_height))+" high peak(s)"
+	pki_height_label = str(len(pki_height))+" low peak(s)"
+
+	#
+	plt.subplot(2,1,2)
+	plt.plot(trace)
+	plt.axhline(y=0, color='k') #x axis line
+	plt.axvspan(a, b, color='red', alpha=0.5)
+	plt.title(filename)
+	
+	#
+	plt.subplot(2,1,1)
+	plt.plot(segment,'o-',color='blue') #peak+stutter
+	#the points
+	plt.plot(pk_indexes,pk_height,'o',color='red',markersize=10, label=pk_height_label)
+	plt.plot(pki_index_trim,pki_height,'o',color='green',markersize=10, label=pki_height_label) 
+	plt.axhline(y=0, color='k') #x axis line
+	plt.title("{} to {}".format(a,b))
+	plt.legend() #show labels	
 
 
-	# plt.axhline(y=0, color='k') #x axis line
-	# # plt.plot(trace)
-	# plt.plot(segment,color='blue') #peak+stutter
-	# # plt.plot(inv_segment,color='red') #peak+stutter
-	# plt.plot(pk_indexes,pk_height,'o',color='red',markersize=10, label=pk_height_label)
-	# plt.plot(pki_index_trim,pki_height,'o',color='green',markersize=10, label=pki_height_label) 
-	# plt.title(filename)
-	# plt.legend() #show labels
-	# plt.show() #print the graph
+	plt.legend() #show labels
+	
+	plt.show() #print the graph
 
 
 def visualize_all():
