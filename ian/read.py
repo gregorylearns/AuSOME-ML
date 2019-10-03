@@ -8,7 +8,7 @@ from ladder_fit import convert_to_bp, convert_to_index, find_lower, find_upper
 from tqdm import tqdm
 
 my_dir = "/home/bo/PGC/microsat/testdata/training/GetHeight/"
-file = pd.read_csv(my_dir+'HSC20_D_Channel4.csv')
+file = pd.read_csv(my_dir+'HSC24-A_Channel2_Mini.csv')
 a = 'DATA1'
 b = 'DATA2'
 c = 'DATA3'
@@ -20,6 +20,9 @@ new_values1 = []
 new_values2 = []
 new_values3 = []
 new_values4 = []
+
+new_v_area1 = []
+new_v_area2 = []
 
 for i in tqdm(range(len(file))):
 	filename = file.iat[i, 0]
@@ -58,17 +61,14 @@ for i in tqdm(range(len(file))):
 			elif converted_bp > alelle1:
 				break
 
-		# alelle1_index = index_of_peaks[height.index(max(height))]
-		# lower = alelle1 - 80
-		# upper = alelle1_index + 40
+		ind = index_of_peaks[height.index(max(height))]
 
-		# area = np.trapz(data1[lower:upper])
-		# #label is 1
 		new_values1.append(max(height))
-		new_values3.append(index_of_peaks[height.index(max(height))])
+		new_values3.append(ind)
+		new_v_area1.append(np.trapz(data1[ind-80:ind+40]))
+
 
 		if alelle1 == alelle2:
-			#continue
 			new_values2.append(max(height))
 			new_values4.append(index_of_peaks[height.index(max(height))])
 
@@ -85,20 +85,21 @@ for i in tqdm(range(len(file))):
 					height.append(data1[x])
 				elif converted_bp > alelle2:
 					break
-			# alelle2_index = index_of_peaks[height.index(max(height))]
-
-			# if alelle1_index+80>=alelle2_index or alelle1_index-80<=alelle2_index:
-			# 	#same data as area alelle1
-			# 	#put 2 in label
-
 			new_values2.append(max(height))
 			new_values4.append(index_of_peaks[height.index(max(height))])
+			new_v_area1.append(np.trapz(data1[ind-80:ind+40]))
 
 	else:
 		new_values1.append(float('nan'))
 		new_values2.append(float('nan'))
 		new_values3.append(float('nan'))
 		new_values4.append(float('nan'))
+		new_v_area1.append(float('nan'))
+		new_v_area2.append(float('nan'))
+
+
+
+
 
 
 
@@ -108,6 +109,8 @@ file["Height_column1"] = pd.Series(new_values1)
 file["Height_column2"] = pd.Series(new_values2)
 file["Index_column3"] = pd.Series(new_values3)
 file["Index_column4"] = pd.Series(new_values4)
+file["Area_column1"] = pd.Series(new_v_area1)
+file["Area_column2"] = pd.Series(new_v_area2)
 
-file.to_csv(my_dir+'HSC20_D_Channel4_DATA4.csv')
-print(my_dir+'HSC20_D_Channel4_DATA4.csv Saved')
+file.to_csv(my_dir+'HSC24-A_Channel2_Mini_witharea.csv')
+print(my_dir+'HSC24-A_Channel2_Mini_witharea.csv Saved')
