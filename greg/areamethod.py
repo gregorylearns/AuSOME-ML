@@ -25,7 +25,7 @@ def plotgraph(filename,peakwindow):
 
 	print("Peaks detected from channel: %s \n%s\n" % (len(all_pk_trim),all_pk_trim))
 
-	seg_ranges = [[x-80,x+40] for x in all_pk_trim]
+	seg_ranges = [[x-80,x+40] for x in all_pk_trim] #Segment Ranges
 	
 
 	for i in range(len(seg_ranges)):
@@ -115,7 +115,7 @@ def plotgraph(filename,peakwindow):
 		print("[{}] -> {}".format(i,seg_ranges[i]))
 
 	#Asks for user input and select peaks to choose
-	#Idea: add option to repeat findpeaks if no peak is still detected.
+	#Idea: add option to repeat findpeaks or manual [0] if desired peak is not detected.
 
 	while True:
 		sel_peaks = str(input("\n>")).split(',')
@@ -127,6 +127,7 @@ def plotgraph(filename,peakwindow):
 
 	plt.show()
 	print([filename,all_pk_trim,sel_peaks])
+	#Returns Filename, List of peaks in threshold
 	return([filename,all_pk_trim,sel_peaks])
 
 
@@ -158,8 +159,11 @@ def visualize_all():
 	plt.show(block=False)
 
 	while True:
-		window = (str(input("Please insert search window ('x,y'): ")).split(','))
+		window = (str(input("Please insert search window ('x,y') or 'all': ")).split(','))
 		if len(window) == 2:
+			break
+		elif window[0].lower() == 'all':
+			window = [0,7000]
 			break
 
 	print("\nPlease close graph to continue.....\n")
