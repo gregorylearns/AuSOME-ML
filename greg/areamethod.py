@@ -21,7 +21,14 @@ def plotgraph(filename,peakwindow):
 					if a > int(peakwindow[0]) and a < int(peakwindow[1])]
 
 	all_pk_height = [channeldata[a] for a in all_pk_trim]
-	# plt.plot(channeldata)
+
+
+	if len(all_pk_trim) == 0:
+		print("No peaks found in channel with threshold=%s" % 2000)
+		plt.plot(channeldata)
+		plt.show()
+
+
 
 	print("Peaks detected from channel: %s \n%s\n" % (len(all_pk_trim),all_pk_trim))
 
@@ -106,7 +113,7 @@ def plotgraph(filename,peakwindow):
 	plt.axhline(y=0, color='k') #x axis line
 	plt.title(filename)
 	plt.legend() #show labels	
-	plt.show("Please close graph to continue.....") #print the graph
+	plt.show(block=False) #print the graph
 
 	print("{} potential peaks detected. Please select peaks ".format(len(seg_ranges)),end='')
 	print("separated by commas. \ne.g: 1,2 (heterozygous) or 1 (homozygous)\n")
@@ -120,23 +127,31 @@ def plotgraph(filename,peakwindow):
 	while True:
 		sel_peaks = str(input("\n>")).split(',')
 		sel_peaks = [int(p) for p in sel_peaks]
-		if len(sel_peaks) > len(seg_ranges) or min(sel_peaks) < 0 or max(sel_peaks) >len(sel_peaks):
+		if len(sel_peaks) > len(seg_ranges) or min(sel_peaks) < 0 or max(sel_peaks) > len(sel_peaks):
 			print("Invalid input")
 		else:
 			break
 
 	plt.show()
+	print("Please close graph to continue.....")
+
 	print([filename,all_pk_trim,sel_peaks])
-	#Returns Filename, List of peaks in threshold
+	#Returns Filename, List of peaks in threshold, and user selected peaks
 	return([filename,all_pk_trim,sel_peaks])
 
 
 
-def visualize_all():
+def visualize_all(filename):
 	my_dir = "/home/bo/PGC/microsat/testdata/training/GetHeight/"
 	test_file = "HSC24-A_Channel2.csv"
 	data = pd.read_csv(my_dir+test_file)
+	currentfile = filename
 
+	record = SeqIO.read(my_dir+filename,"abi")
+	channeldata = record.annotations['abif_raw']['DATA1']
+
+
+	plt.subplot(2,1,1)
 	mainchanneldata = defaultdict(list)
 	start = time()
 	for f in range(len(data)):
@@ -156,6 +171,11 @@ def visualize_all():
 		plt.plot(mainchanneldata['A_'+filename+'.fsa'], alpha=0.1,color='blue')
 	print('Initializing {} file(s) took: {:.2f} s'.format(len(data),(time()-start)))
 	plt.title("%s to %s "% (data.iat[1, 0],data.iat[-1,0]))
+	
+	#bottom plot
+	plt.subplot(2,1,2)
+	plt.plot(channeldata)
+	plt.title(currentfile)
 	plt.show(block=False)
 
 	while True:
@@ -189,9 +209,12 @@ def getarea():
 
 
 def main():
-	filename = "A_COR_12_1_Hos.fsa"
+	filename = "A_COR_12_12_Hos.fsa"
 
-	window = visualize_all()
+	print("This script currently only supports .fsa Files from ABI(R) 3730 Sequencing Machine")
+	print("Initializing....")
+
+	window = visualize_all(filename)
 	plotgraph(filename,window)
 
 main()
