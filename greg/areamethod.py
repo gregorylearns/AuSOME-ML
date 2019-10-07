@@ -103,12 +103,16 @@ def plotgraph(filename,peakwindow):
 	plt.subplot(2,1,2)
 	plt.plot(ladderdata,color='black',alpha=0.3)
 	plt.plot(channeldata)
-	plt.plot(all_pk_trim,all_pk_height,'+',color='black',markersize=5,label="Suggested Peaks")
+	plt.plot(all_pk_trim,all_pk_height,'+',
+				color='black',markersize=5,label="Suggested Peaks")
 	plt.ylim(0,max(all_pk_height)+1000)
 	plt.xlim(500,7000)
+
 	for i in range(len(seg_ranges)):
 		plt.axvspan(seg_ranges[i][0], seg_ranges[i][1], color='m', alpha=0.5)
-	plt.axvspan(0,peakwindow[0], color ='black',alpha=0.3,label="Excluded from peak search")
+
+	plt.axvspan(0,peakwindow[0], 
+				color ='black',alpha=0.3,label="Excluded from peak search")
 	plt.axvspan(int(peakwindow[1]), len(channeldata),color ='black', alpha=0.3)
 	plt.axhline(y=0, color='k') #x axis line
 	plt.title(filename)
@@ -118,8 +122,10 @@ def plotgraph(filename,peakwindow):
 	print("{} potential peaks detected. Please select peaks ".format(len(seg_ranges)),end='')
 	print("separated by commas. \ne.g: 1,2 (heterozygous) or 1 (homozygous)\n")
 	
+
 	for i in range(len(seg_ranges)):
 		print("[{}] -> {}".format(i,seg_ranges[i]))
+
 
 	#Asks for user input and select peaks to choose
 	#Idea: add option to repeat findpeaks or manual [0] if desired peak is not detected.
@@ -132,10 +138,11 @@ def plotgraph(filename,peakwindow):
 		else:
 			break
 
+
 	plt.show()
 	print("Please close graph to continue.....")
 
-	print([filename,all_pk_trim,sel_peaks])
+	# print([filename,all_pk_trim,sel_peaks])
 	#Returns Filename, List of peaks in threshold, and user selected peaks
 	return([filename,all_pk_trim,sel_peaks])
 
@@ -209,7 +216,7 @@ def getarea():
 
 
 def main():
-	filename = "A_COR_12_12_Hos.fsa"
+	filename = "A_COR_12_13_Hos.fsa"
 
 	print("This script currently only supports .fsa Files from ABI(R) 3730 Sequencing Machine")
 	print("Initializing....")
