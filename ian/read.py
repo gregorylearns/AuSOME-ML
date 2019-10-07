@@ -8,11 +8,15 @@ from ladder_fit import convert_to_bp, convert_to_index, find_lower, find_upper
 from findpeaks import findpeaks as fp
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 my_dir = "/home/bo/PGC/microsat/testdata/training/GetHeight/"
 file = pd.read_csv(my_dir+'HSC24-A_Channel2_Mini.csv')
 =======
 file = pd.read_csv('Channel1_Data.csv')
 >>>>>>> f9afbe3... updated read.py and added Hsc40.csv
+=======
+file = pd.read_csv('Channel1_Data_Normalized.csv')
+>>>>>>> 4859ffb... added datasets and updated AuSOME.py
 a = 'DATA1'
 b = 'DATA2'
 c = 'DATA3'
@@ -179,7 +183,7 @@ for i in range(len(file)):
 		all_peaks = fp.findpeaks(data, spacing=15, limit=100)
 
 		for i in range(len(all_peaks)-1):
-			lower = all_peaks[i] - 100
+			lower = all_peaks[i] - 80
 			upper = all_peaks[i] + 20
 			if lower < index_min or upper > index_max:
 				continue
@@ -244,7 +248,7 @@ for i in range(len(file)):
 dataset = {'Filename': file_name, 'Label': label, 'Area': area_of_peaks, 'No. of peaks': number_of_peaks, 'Length': length_in_bp}
 
 df = pd.DataFrame(dataset, columns=['Filename', 'Label', 'Area', 'No. of peaks', 'Length'])
-df.to_csv('Area_NofPeaks_Length_reduced.csv', index=False)
+df.to_csv('Hsc40_Area_NofPeaks_Length_reduced.csv', index=False)
 
 <<<<<<< HEAD
 file["Height_column1"] = pd.Series(new_values1)
