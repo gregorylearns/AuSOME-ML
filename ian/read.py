@@ -58,11 +58,17 @@ for i in tqdm(range(len(file))):
 			elif converted_bp > alelle1:
 				break
 
+		# alelle1_index = index_of_peaks[height.index(max(height))]
+		# lower = alelle1 - 80
+		# upper = alelle1_index + 40
 
+		# area = np.trapz(data1[lower:upper])
+		# #label is 1
 		new_values1.append(max(height))
 		new_values3.append(index_of_peaks[height.index(max(height))])
 
 		if alelle1 == alelle2:
+			#continue
 			new_values2.append(max(height))
 			new_values4.append(index_of_peaks[height.index(max(height))])
 
@@ -79,6 +85,12 @@ for i in tqdm(range(len(file))):
 					height.append(data1[x])
 				elif converted_bp > alelle2:
 					break
+			# alelle2_index = index_of_peaks[height.index(max(height))]
+
+			# if alelle1_index+80>=alelle2_index or alelle1_index-80<=alelle2_index:
+			# 	#same data as area alelle1
+			# 	#put 2 in label
+
 			new_values2.append(max(height))
 			new_values4.append(index_of_peaks[height.index(max(height))])
 
