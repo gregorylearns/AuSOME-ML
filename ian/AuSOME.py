@@ -35,7 +35,7 @@ peaks = []
 index_35 = find_lower(record.annotations['abif_raw']['DATA105'], dye)
 index_500 = find_upper(record.annotations['abif_raw']['DATA105'], dye)
 
-detected_peaks = fp.findpeaks(data, spacing=15, limit=25)
+detected_peaks = fp.findpeaks(data, spacing=25, limit=50)
 
 for i in range(len(detected_peaks)-1):
 	lower_end_of_window = detected_peaks[i] - 80
@@ -49,9 +49,11 @@ for i in range(len(detected_peaks)-1):
 	length.append(round(convert_to_bp(detected_peaks[i], record.annotations['abif_raw']['DATA105'], dye)))
 
 
-for i in range(len(area_of_peaks)-1):
+for i in range(len(peaks)-1):
 	label.append(model.predict([[area_of_peaks[i], no_of_peaks[i], length[i]]]))
 
+print(peaks)
+print(label)
 
 for x in range(len(label)-1):
 	if label[x] == 1:

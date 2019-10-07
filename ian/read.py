@@ -7,16 +7,16 @@ import math
 from ladder_fit import convert_to_bp, convert_to_index, find_lower, find_upper
 from findpeaks import findpeaks as fp
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-my_dir = "/home/bo/PGC/microsat/testdata/training/GetHeight/"
-file = pd.read_csv(my_dir+'HSC24-A_Channel2_Mini.csv')
-=======
-file = pd.read_csv('Channel1_Data.csv')
->>>>>>> f9afbe3... updated read.py and added Hsc40.csv
-=======
+# <<<<<<< HEAD
+# <<<<<<< HEAD
+# my_dir = "/home/bo/PGC/microsat/testdata/training/GetHeight/"
+# file = pd.read_csv(my_dir+'HSC24-A_Channel2_Mini.csv')
+# =======
+# file = pd.read_csv('Channel1_Data.csv')
+# >>>>>>> f9afbe3... updated read.py and added Hsc40.csv
+# =======
 file = pd.read_csv('Channel1_Data_Normalized.csv')
->>>>>>> 4859ffb... added datasets and updated AuSOME.py
+# >>>>>>> 4859ffb... added datasets and updated AuSOME.py
 a = 'DATA1'
 b = 'DATA2'
 c = 'DATA3'
@@ -24,17 +24,17 @@ d = 'DATA4'
 e = 'DATA105'
 dye = [500, 490, 450, 400, 350, 340, 300, 250, 200, 160, 150, 139, 100, 75, 50, 35]
 
-<<<<<<< HEAD
-new_values1 = []
-new_values2 = []
-new_values3 = []
-new_values4 = []
+# <<<<<<< HEAD
+# new_values1 = []
+# new_values2 = []
+# new_values3 = []
+# new_values4 = []
 
-new_v_area1 = []
-new_v_area2 = []
+# new_v_area1 = []
+# new_v_area2 = []
 
-for i in tqdm(range(len(file))):
-=======
+# for i in tqdm(range(len(file))):
+# =======
 # new_values1 = []
 # new_values2 = []
 # new_values3 = []
@@ -45,12 +45,9 @@ file_name = []
 number_of_peaks = []
 length_in_bp = []
 noise_count = 0
-x = 0
-y = 1
-z = 2
 
 for i in range(len(file)):
->>>>>>> f9afbe3... updated read.py and added Hsc40.csv
+# >>>>>>> f9afbe3... updated read.py and added Hsc40.csv
 	filename = file.iat[i, 0]
 	alelle1 = file.iat[i, 1]
 	alelle2 = file.iat[i, 2]
@@ -123,22 +120,22 @@ for i in range(len(file)):
 				break
 		alelle1_index = index_of_peaks[height.index(max(height))]
 
-<<<<<<< HEAD
-		ind = index_of_peaks[height.index(max(height))]
+# <<<<<<< HEAD
+# 		ind = index_of_peaks[height.index(max(height))]
 
-		new_values1.append(max(height))
-		new_values3.append(ind)
-		new_v_area1.append(np.trapz(data1[ind-80:ind+40]))
+# 		new_values1.append(max(height))
+# 		new_values3.append(ind)
+# 		new_v_area1.append(np.trapz(data1[ind-80:ind+40]))
 
 
-		if alelle1 == alelle2:
-			new_values2.append(max(height))
-			new_values4.append(index_of_peaks[height.index(max(height))])
+		# if alelle1 == alelle2:
+		# 	new_values2.append(max(height))
+		# 	new_values4.append(index_of_peaks[height.index(max(height))])
 
-		else: 
-=======
+		# else: 
+
 		if alelle1 != alelle2:
->>>>>>> f9afbe3... updated read.py and added Hsc40.csv
+
 			height = []
 			index_of_peaks = []
 			for x in range(index_min, index_max):
@@ -150,23 +147,7 @@ for i in range(len(file)):
 					height.append(data[x])
 				elif converted_bp > alelle2+1.5:
 					break
-<<<<<<< HEAD
-			new_values2.append(max(height))
-			new_values4.append(index_of_peaks[height.index(max(height))])
-			new_v_area1.append(np.trapz(data1[ind-80:ind+40]))
 
-	else:
-		new_values1.append(float('nan'))
-		new_values2.append(float('nan'))
-		new_values3.append(float('nan'))
-		new_values4.append(float('nan'))
-		new_v_area1.append(float('nan'))
-		new_v_area2.append(float('nan'))
-
-
-
-
-=======
 			alelle2_index = index_of_peaks[height.index(max(height))]
 
 			if alelle2_index > alelle1_index:
@@ -188,12 +169,12 @@ for i in range(len(file)):
 			if lower < index_min or upper > index_max:
 				continue
 
-			if noise_count > 1160:
+			if noise_count > 2320:
 				if alelle1 != alelle2:
 					if all_peaks[i] == alelle1_index or all_peaks[i] == alelle2_index:
 						file_name.append(filename)
 						area_of_peaks.append(np.trapz(data[lower:upper]))
-						number_of_peaks.append(len(fp.findpeaks(data[lower:upper], spacing=10,limit=50)))
+						number_of_peaks.append(len(fp.findpeaks(data[lower:upper], spacing=5,limit=50)))
 						length_in_bp.append(round(convert_to_bp(all_peaks[i], record.annotations['abif_raw'][e], dye)))	
 					else:
 						continue
@@ -201,14 +182,14 @@ for i in range(len(file)):
 					if all_peaks[i] == alelle1_index:
 						file_name.append(filename)
 						area_of_peaks.append(np.trapz(data[lower:upper]))
-						number_of_peaks.append(len(fp.findpeaks(data[lower:upper], spacing=10,limit=50)))
+						number_of_peaks.append(len(fp.findpeaks(data[lower:upper], spacing=5,limit=50)))
 						length_in_bp.append(round(convert_to_bp(all_peaks[i], record.annotations['abif_raw'][e], dye)))
 					else:
 						continue
 			else:
 				file_name.append(filename)
 				area_of_peaks.append(np.trapz(data[lower:upper]))
-				number_of_peaks.append(len(fp.findpeaks(data[lower:upper], spacing=10,limit=50)))
+				number_of_peaks.append(len(fp.findpeaks(data[lower:upper], spacing=5,limit=50)))
 				length_in_bp.append(round(convert_to_bp(all_peaks[i], record.annotations['abif_raw'][e], dye)))
 
 
@@ -240,7 +221,7 @@ for i in range(len(file)):
 		# new_values2.append(float('nan'))
 		# new_values3.append(float('nan'))
 		# new_values4.append(float('nan'))
->>>>>>> f9afbe3... updated read.py and added Hsc40.csv
+# >>>>>>> f9afbe3... updated read.py and added Hsc40.csv
 
 
 
@@ -248,23 +229,23 @@ for i in range(len(file)):
 dataset = {'Filename': file_name, 'Label': label, 'Area': area_of_peaks, 'No. of peaks': number_of_peaks, 'Length': length_in_bp}
 
 df = pd.DataFrame(dataset, columns=['Filename', 'Label', 'Area', 'No. of peaks', 'Length'])
-df.to_csv('Hsc40_Area_NofPeaks_Length_reduced.csv', index=False)
+df.to_csv('Hsc40_Area_NofPeaks_Length_reduced1.csv', index=False)
 
-<<<<<<< HEAD
-file["Height_column1"] = pd.Series(new_values1)
-file["Height_column2"] = pd.Series(new_values2)
-file["Index_column3"] = pd.Series(new_values3)
-file["Index_column4"] = pd.Series(new_values4)
-file["Area_column1"] = pd.Series(new_v_area1)
-file["Area_column2"] = pd.Series(new_v_area2)
+# <<<<<<< HEAD
+# file["Height_column1"] = pd.Series(new_values1)
+# file["Height_column2"] = pd.Series(new_values2)
+# file["Index_column3"] = pd.Series(new_values3)
+# file["Index_column4"] = pd.Series(new_values4)
+# file["Area_column1"] = pd.Series(new_v_area1)
+# file["Area_column2"] = pd.Series(new_v_area2)
 
-file.to_csv(my_dir+'HSC24-A_Channel2_Mini_witharea.csv')
-print(my_dir+'HSC24-A_Channel2_Mini_witharea.csv Saved')
-=======
+# file.to_csv(my_dir+'HSC24-A_Channel2_Mini_witharea.csv')
+# print(my_dir+'HSC24-A_Channel2_Mini_witharea.csv Saved')
+# =======
 # file["Height_column1"] = pd.Series(new_values1)
 # file["Height_column2"] = pd.Series(new_values2)
 # file["Index_column3"] = pd.Series(new_values3)
 # file["Index_column4"] = pd.Series(new_values4)
 
 # file.to_csv('Height_and_Index.csv')
->>>>>>> f9afbe3... updated read.py and added Hsc40.csv
+# >>>>>>> f9afbe3... updated read.py and added Hsc40.csv
