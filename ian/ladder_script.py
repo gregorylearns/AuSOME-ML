@@ -16,7 +16,7 @@ channels = [a, b, c, d, e]
 dye = [500, 490, 450, 400, 350, 340, 300, 250, 200, 160, 150, 139, 100, 75, 50, 35]
 
 # directory = "/home/bo/PGC/microsat/testdata/training/GetHeight/"
-record = SeqIO.read('A_GUI_12_20_Hos.fsa', 'abi')
+record = SeqIO.read('A_COR_12_26_Hos.fsa', 'abi')
 trace = defaultdict(list)
 
 for c in channels:

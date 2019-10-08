@@ -9,21 +9,25 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import GridSearchCV
 from sklearn.neighbors import KNeighborsClassifier
 
-file = pd.read_csv('Hsc40_Area_NofPeaks_Length_reduced.csv')
+file = pd.read_csv('Hsc40_Area_NofPeaks_Length_Height_reduced.csv')
 
+filename = []
 label = []
 area = []
 no_of_peaks = []
 length = []
+height = []
 
 for i in range(len(file)):
+	filename.append(file.iat[i, 0])
 	label.append(file.iat[i, 1])
 	area.append(file.iat[i, 2])
 	no_of_peaks.append(file.iat[i, 3])
 	length.append(file.iat[i, 4])
+	height.append(file.iat[i, 5])
 
-matrix = [area, no_of_peaks, length]
-X = np.column_stack(matrix)
+matrix = [filename, area, no_of_peaks, length, height]
+with_filename = np.column_stack(matrix)
 y = label
 # one = 0
 # zero = 0
@@ -47,7 +51,14 @@ y = label
 # 		zero += 1
 # print(f'Ones: {one}		Zeroes: {zero}')
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25)
+X_train, X_test, y_train, y_test = train_test_split(with_filename, y, test_size=0.25)
+
+test_matrix = [X_test, y_test]
+test_data = np.column_stack(test_matrix)
+pd.DataFrame(test_data).to_csv("test_data.csv", index=False)
+
+X_test = X_test[:, 1:]
+X_train = X_train[:, 1:]
 # ss = StandardScaler()
 # X_train = ss.fit_transform(X_train)
 # X_test = ss.transform(X_test)

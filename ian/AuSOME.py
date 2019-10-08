@@ -31,11 +31,12 @@ area_of_peaks = []
 no_of_peaks = []
 length = []
 peaks = []
+height = []
 
 index_35 = find_lower(record.annotations['abif_raw']['DATA105'], dye)
 index_500 = find_upper(record.annotations['abif_raw']['DATA105'], dye)
 
-detected_peaks = fp.findpeaks(data, spacing=25, limit=50)
+detected_peaks = fp.findpeaks(data, spacing=25, limit=25)
 
 for i in range(len(detected_peaks)-1):
 	lower_end_of_window = detected_peaks[i] - 80
@@ -45,15 +46,17 @@ for i in range(len(detected_peaks)-1):
 
 	peaks.append(detected_peaks[i])
 	area_of_peaks.append(np.trapz(data[lower_end_of_window:upper_end_of_window]))
-	no_of_peaks.append(len(fp.findpeaks(data[lower_end_of_window:upper_end_of_window], spacing=10,limit=50)))
+	no_of_peaks.append(len(fp.findpeaks(data[lower_end_of_window:upper_end_of_window], spacing=5,limit=15)))
 	length.append(round(convert_to_bp(detected_peaks[i], record.annotations['abif_raw']['DATA105'], dye)))
+	height.append(data[detected_peaks[i]])
 
 
 for i in range(len(peaks)-1):
-	label.append(model.predict([[area_of_peaks[i], no_of_peaks[i], length[i]]]))
+	label.append(model.predict([[area_of_peaks[i], no_of_peaks[i], length[i], height[i]]]))
 
-print(peaks)
-print(label)
+# print(peaks)
+# print(len(peaks))
+# print(label)
 
 for x in range(len(label)-1):
 	if label[x] == 1:

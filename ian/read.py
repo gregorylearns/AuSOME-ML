@@ -44,6 +44,7 @@ label = []
 file_name = []
 number_of_peaks = []
 length_in_bp = []
+height_of_peaks = []
 noise_count = 0
 
 for i in range(len(file)):
@@ -161,7 +162,7 @@ for i in range(len(file)):
 				else:
 					two_peaks = False
 
-		all_peaks = fp.findpeaks(data, spacing=15, limit=100)
+		all_peaks = fp.findpeaks(data, spacing=25, limit=25)
 
 		for i in range(len(all_peaks)-1):
 			lower = all_peaks[i] - 80
@@ -174,23 +175,26 @@ for i in range(len(file)):
 					if all_peaks[i] == alelle1_index or all_peaks[i] == alelle2_index:
 						file_name.append(filename)
 						area_of_peaks.append(np.trapz(data[lower:upper]))
-						number_of_peaks.append(len(fp.findpeaks(data[lower:upper], spacing=5,limit=50)))
-						length_in_bp.append(round(convert_to_bp(all_peaks[i], record.annotations['abif_raw'][e], dye)))	
+						number_of_peaks.append(len(fp.findpeaks(data[lower:upper], spacing=5,limit=15)))
+						length_in_bp.append(round(convert_to_bp(all_peaks[i], record.annotations['abif_raw'][e], dye)))
+						height_of_peaks.append(data[all_peaks[i]])
 					else:
 						continue
 				elif alelle1 == alelle2:
 					if all_peaks[i] == alelle1_index:
 						file_name.append(filename)
 						area_of_peaks.append(np.trapz(data[lower:upper]))
-						number_of_peaks.append(len(fp.findpeaks(data[lower:upper], spacing=5,limit=50)))
+						number_of_peaks.append(len(fp.findpeaks(data[lower:upper], spacing=5,limit=15)))
 						length_in_bp.append(round(convert_to_bp(all_peaks[i], record.annotations['abif_raw'][e], dye)))
+						height_of_peaks.append(data[all_peaks[i]])
 					else:
 						continue
 			else:
 				file_name.append(filename)
 				area_of_peaks.append(np.trapz(data[lower:upper]))
-				number_of_peaks.append(len(fp.findpeaks(data[lower:upper], spacing=5,limit=50)))
+				number_of_peaks.append(len(fp.findpeaks(data[lower:upper], spacing=5,limit=15)))
 				length_in_bp.append(round(convert_to_bp(all_peaks[i], record.annotations['abif_raw'][e], dye)))
+				height_of_peaks.append(data[all_peaks[i]])
 
 
 			if alelle1 != alelle2:
@@ -226,10 +230,10 @@ for i in range(len(file)):
 
 
 # print(file[["Hsc 40"]])
-dataset = {'Filename': file_name, 'Label': label, 'Area': area_of_peaks, 'No. of peaks': number_of_peaks, 'Length': length_in_bp}
+dataset = {'Filename': file_name, 'Label': label, 'Area': area_of_peaks, 'No. of peaks': number_of_peaks, 'Length': length_in_bp, 'Height of peaks': height_of_peaks}
 
-df = pd.DataFrame(dataset, columns=['Filename', 'Label', 'Area', 'No. of peaks', 'Length'])
-df.to_csv('Hsc40_Area_NofPeaks_Length_reduced1.csv', index=False)
+df = pd.DataFrame(dataset, columns=['Filename', 'Label', 'Area', 'No. of peaks', 'Length', 'Height of peaks'])
+df.to_csv('Hsc40_Area_NofPeaks_Length_Height_reduced.csv', index=False)
 
 # <<<<<<< HEAD
 # file["Height_column1"] = pd.Series(new_values1)
