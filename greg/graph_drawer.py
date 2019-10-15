@@ -25,15 +25,18 @@ def plotfsa(file="A_GUI_12_2.fsa"):
 
 	print(dic)
 	# print(record.annotations.keys())
-
-	# plt.plot(trace['DATA1'], color='blue', label=dic["DyeN1"])
-	plt.plot(trace['DATA2'], color='red' , label=dic["DyeN2"])
+	plt.style.use('seaborn-poster')
+	plt.plot(trace['DATA1'], color='blue', label=dic["DyeN1"])
+	# plt.plot(trace['DATA2'], color='red' , label=dic["DyeN2"])
 	# plt.plot(trace['DATA3'], color='green', label =dic["DyeN3"])
 	# plt.plot(trace['DATA4'], color='yellow', label=dic["DyeN4"])
-	plt.plot(trace['DATA105'], color='black', label=dic["DyeN5"])
-	
+	plt.plot(trace['DATA105'], color='black', label=f'500 {dic["DyeN5"]}')
+	plt.ylabel("Relative Fluorescence Units (RFU)")
+	plt.xlabel("Index")
 	plt.legend()
 	plt.ylim((0,10000))
+	plt.xlim((0,7000))
+	plt.title(file)
 	plt.show()
 
 def main():
