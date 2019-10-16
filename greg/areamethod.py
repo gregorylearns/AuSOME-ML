@@ -109,18 +109,20 @@ def plotgraph(directory, filename,peakwindow,threshold=2000):
 			segment = np.array(channeldata[a:b])
 
 			# the points
+			plt.style.use('seaborn')
 			plt.subplot(2,len(seg_ranges),i+1)
 			plt.plot(list(range(a,b)),segment,color='blue') #peak+stutter
+			plt.title(i+1)
 			plt.yticks([])
 			plt.ylim(0,max(all_pk_height)+1000)
-			plt.axhline(y=0, color='k') #x axis line
+
 			
 		#bottom
 		plt.subplot(2,1,2)
 		plt.plot(ladderdata,color='black',alpha=0.3)
 		plt.plot(channeldata)
-		plt.plot(all_pk,all_pk_height,'+',
-					color='black',markersize=5,label="Suggested Peaks")
+		plt.plot(all_pk,all_pk_height,'o',
+					color='red',markersize=5,label="Suggested Peaks")
 		plt.ylim(0,max(all_pk_height)+1000)
 		plt.xlim(500,7000)
 
@@ -261,9 +263,9 @@ def linearRegPredict():
 
 	ROCCurveplot(logmodel,x_test,y_test,y_train)
 
-	plt.plot(x_train,y_train,'o',color='red')
-	plt.plot(x_train, logmodel.predict(x_train))
-	plt.show()
+	# plt.plot(x_train,y_train,'o',color='red')
+	# plt.plot(x_train, logmodel.predict(x_train))
+	# plt.show()
 
 	# print(np.corrcoef(,d_peaks_h)[1,0])
 
@@ -319,23 +321,26 @@ def main():
 
 	window = visualize_all(filename)
 
-	trainingdata = [["filename","selpeaks","selheight","selarea","peakarea",
-				"stutarea","notpeak","notheight","notarea","notpeakarea","notstuarea"]]
+	df_labels = ["filename","selpeaks","selheight","selarea","peakarea",
+				"stutarea","notpeak","notheight","notarea","notpeakarea","notstuarea"]
+
+	my_df = pd.DataFrame(columns=df_labels)
+
 
 	print(len(filecsv))
 	for i in range(len(filecsv)):
 		filename = filenamePrep(filecsv.iat[i, 0])
 		if filename == None:
 			continue
-		print("Training data, {}/10 files".format(i))
+		print(f"Training data, {i+1}/{range(len(filecsv))} files")
 		array = plotgraph(directory,filename,window)
-		trainingdata.append(array)
-
+		my_df = my_df.append(pd.Series(array,my_df.columns),ignore_index=True)
+		print(my_df)
 	colname = trainingdata.pop(0)
-	df = pd.DataFrame(trainingdata,columns=colname, dtype=int)
-	df.to_pickle("Channel1_mini_areamethod_result.pk1")
+	# df = pd.DataFrame(trainingdata,columns=colname, dtype=int)
+	# my_df.to_pickle("Channel1_mini_areamethod_result2.pk1")
 
 	# plotgraph(directory,filename,window)
-# main()
-linearRegPredict()
+main()
+# linearRegPredict()
 
