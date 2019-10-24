@@ -166,7 +166,7 @@ def plotgraph(directory, filename,peakwindow,threshold=2000):
 		print("Please close graph to continue.....")
 		plt.show()
 		
-
+	#figure out a way to move these to the top
 	height = [channeldata[h] for h in all_pk]
 	seg_area = [np.trapz(channeldata[s[0]:s[1]]) for s in seg_ranges]
 	sel_peaks = [p-1 for p in sel_peaks]
