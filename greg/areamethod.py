@@ -305,10 +305,6 @@ def Peakboundaries(channel,peak):
 
 
 
-
-
-
-
 def main():
 	filename = "A_BOH_12_12.fsa"
 	directory="/home/bo/PGC/microsat/testdata/training/GetHeight/"
