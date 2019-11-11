@@ -6,6 +6,7 @@ from Bio import SeqIO
 from findpeaks import findpeaks as fp
 from collections import defaultdict
 from time import time
+from matplotlib.offsetbox import AnchoredText
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
@@ -23,6 +24,38 @@ def filenamePrep(filename):
 		return('A_' + filename + '.fsa')
 	else:
 		return
+
+
+
+def Peakboundaries(channel,peak):
+	"""
+	This function takes the peak index and takes the index of its boundaries.
+	This will use a sliding window to find the first zero-slope peak/dip on
+	the left or right part of the peak.
+	Input: index of peak
+	Output: left boundary index
+	"""
+	leftbound = peak
+	rightbound= peak
+
+	dipFound = False
+	while dipFound == False:
+		slope = (channel[leftbound-1]-channel[leftbound])/((leftbound-1)-leftbound)
+		if slope <= 0:
+			dipFound = True
+			leftbound += 1
+		leftbound -= 1
+
+	
+	dipFound = False
+	while dipFound == False:
+		slope = (channel[rightbound+1]-channel[rightbound])/((rightbound+1)-rightbound)
+		if slope >= 0:
+			dipFound = True
+			rightbound -= 1
+		rightbound += 1
+
+	return(leftbound,rightbound)
 
 
 
@@ -90,9 +123,9 @@ def plotgraph(directory, filename,peakwindow,threshold=2000):
 	while cond == False:
 
 		all_pk = fp.findpeaks(channeldata, spacing=25,limit=threshold)
-		all_pk = [a for a in all_pk 
-						if a > int(peakwindow[0]) and a < int(peakwindow[1])]
-		all_pk_height = [channeldata[a] for a in all_pk]
+		all_pk = [a for a in all_pk if a > int(peakwindow[0]) and a < int(peakwindow[1])]
+		peak_height = [channeldata[a] for a in all_pk]
+
 
 		#What if no peaks is detected?
 		#This block shows the user the graph and that nothing is detected
@@ -104,26 +137,39 @@ def plotgraph(directory, filename,peakwindow,threshold=2000):
 		print("Peaks detected from channel: %s \n%s\n" % (len(all_pk),all_pk))
 		seg_ranges = [[x-80,x+40] for x in all_pk] #Segment Ranges
 		
+		seg_area = [np.trapz(channeldata[s[0]:s[1]]) for s in seg_ranges]
+		pk_area = [np.trapz(channeldata[Peakboundaries(channeldata,i)[0]:Peakboundaries(channeldata,i)[1]])
+			for i in all_pk]
+		stu_area = [seg_area[i] - pk_area[i] for i in range(len(seg_area))]
+
+		print(f'peaks at {all_pk}')
+		print(f'peak height {peak_height}')
+		print(f'seg area {seg_area}')
+		print(f'peak area {pk_area}')
+		print(f'stutter area {stu_area}\n')
+
 		for i in range(len(seg_ranges)):
 			a,b  = seg_ranges[i][0], seg_ranges[i][1]
 			segment = np.array(channeldata[a:b])
+
 
 			# the points
 			plt.style.use('seaborn')
 			plt.subplot(2,len(seg_ranges),i+1)
 			plt.plot(list(range(a,b)),segment,color='blue') #peak+stutter
-			plt.title(i+1)
+			plt.title(f'{i+1}\nlikelihood: 5%')
 			plt.yticks([])
-			plt.ylim(0,max(all_pk_height)+1000)
+			plt.ylim(0,max(peak_height)+1000)
+
 
 			
 		#bottom
 		plt.subplot(2,1,2)
 		plt.plot(ladderdata,color='black',alpha=0.3)
 		plt.plot(channeldata)
-		plt.plot(all_pk,all_pk_height,'o',
+		plt.plot(all_pk,peak_height,'o',
 					color='red',markersize=5,label="Suggested Peaks")
-		plt.ylim(0,max(all_pk_height)+1000)
+		plt.ylim(0,max(peak_height)+1000)
 		plt.xlim(500,7000)
 
 		for i in range(len(seg_ranges)):
@@ -150,13 +196,13 @@ def plotgraph(directory, filename,peakwindow,threshold=2000):
 
 		while True:
 			sel_peaks = str(input("\n>")).split(',')
-			sel_peaks = [int(p) for p in sel_peaks]
-			if len(sel_peaks) == 1 and sel_peaks[0] == 0:
+			sel_peaks = [int(p)-1 for p in sel_peaks]
+			if len(sel_peaks) == 1 and sel_peaks[0] == -1:
 				#not all thres is detected, repeat scan
 				threshold -= 500
 				print("Repeating scan with lowered threshold (-500)")
 				break
-			elif len(sel_peaks) > len(seg_ranges) or min(sel_peaks) < 0 or max(sel_peaks) > len(seg_ranges):
+			elif len(sel_peaks) > len(seg_ranges) or min(sel_peaks)+1 < 0 or max(sel_peaks)+1 > len(seg_ranges):
 				print("Invalid input")
 			else:
 				cond = True #condition is fulfulled
@@ -167,27 +213,25 @@ def plotgraph(directory, filename,peakwindow,threshold=2000):
 		plt.show()
 		
 	#figure out a way to move these to the top
-	height = [channeldata[h] for h in all_pk]
-	seg_area = [np.trapz(channeldata[s[0]:s[1]]) for s in seg_ranges]
-	sel_peaks = [p-1 for p in sel_peaks]
+	# sel_peaks = [p-1 for p in sel_peaks]
 
-	not_height = [height[i] for i in range(len(height)) if i not in sel_peaks]
-	not_seg_area = [seg_area[i] for i in range(len(seg_area)) if i not in sel_peaks]
-	not_sel_peaks = [all_pk[i] for i in range(len(all_pk)) if i not in sel_peaks]
+	# not_height = [height[i] for i in range(len(height)) if i not in sel_peaks]
+	# not_seg_area = [seg_area[i] for i in range(len(seg_area)) if i not in sel_peaks]
+	# not_sel_peaks = [all_pk[i] for i in range(len(all_pk)) if i not in sel_peaks]
 
-	height = [height[i] for i in range(len(height)) if i in sel_peaks]
-	seg_area = [seg_area[i] for i in range(len(seg_area)) if i in sel_peaks]
-	sel_peaks = [all_pk[p] for p in sel_peaks]
+	# height = [height[i] for i in range(len(height)) if i in sel_peaks]
+	# seg_area = [seg_area[i] for i in range(len(seg_area)) if i in sel_peaks]
+	# sel_peaks = [all_pk[p] for p in sel_peaks]
 
 
-	pk_area = [np.trapz(channeldata[Peakboundaries(channeldata,i)[0]:Peakboundaries(channeldata,i)[1]])
-		for i in sel_peaks]
+	# pk_area = [np.trapz(channeldata[Peakboundaries(channeldata,i)[0]:Peakboundaries(channeldata,i)[1]])
+	# 	for i in sel_peaks]
 
-	pk_area_not = [np.trapz(channeldata[Peakboundaries(channeldata,i)[0]:Peakboundaries(channeldata,i)[1]])
-		for i in not_sel_peaks]
+	# pk_area_not = [np.trapz(channeldata[Peakboundaries(channeldata,i)[0]:Peakboundaries(channeldata,i)[1]])
+	# 	for i in not_sel_peaks]
 
-	stu_area = [seg_area[i] - pk_area[i] for i in range(len(seg_area))]
-	stu_area_not = [not_seg_area[i] - pk_area_not[i] for i in range(len(not_seg_area))]
+	# stu_area = [seg_area[i] - pk_area[i] for i in range(len(seg_area))]
+	# stu_area_not = [not_seg_area[i] - pk_area_not[i] for i in range(len(not_seg_area))]
 
 	"""
 	filename = Name of current file
@@ -196,7 +240,11 @@ def plotgraph(directory, filename,peakwindow,threshold=2000):
 	not_sel_peaks = indexes of the not-selected peaks
 	not_height, not_area = height and area of the nonselected peaks
 	"""
-	return([filename, sel_peaks,height,seg_area,pk_area,stu_area,not_sel_peaks,not_height,not_seg_area,pk_area_not,stu_area_not])
+	# return([filename, sel_peaks,height,seg_area,pk_area,stu_area,not_sel_peaks,not_height,not_seg_area,pk_area_not,stu_area_not])
+
+filename = "A_BOH_12_12.fsa"
+directory="/home/bo/PGC/microsat/testdata/training/GetHeight/"
+print(plotgraph(directory,filename,(2500,5000)))
 
 
 def ROCCurveplot(model,x_test,y_test,y_train):
@@ -222,7 +270,7 @@ def ROCCurveplot(model,x_test,y_test,y_train):
 
 
 
-def linearRegPredict():
+def LogRegFit():
 	"""
 	Machine learning predictive model.
 	"""
@@ -256,13 +304,14 @@ def linearRegPredict():
 	logmodel = LogisticRegression()
 	logmodel.fit(x_train, y_train)
 
+
+	#####Testing
 	pred = logmodel.predict(x_test)
 	print(f'\nLog model score: {logmodel.score(x_test,y_test):5f}\n')
 	print(classification_report(y_test,pred))
-
-
 	ROCCurveplot(logmodel,x_test,y_test,y_train)
-
+	#####
+	
 	# plt.plot(x_train,y_train,'o',color='red')
 	# plt.plot(x_train, logmodel.predict(x_train))
 	# plt.show()
@@ -273,70 +322,38 @@ def linearRegPredict():
 
 
 
-def Peakboundaries(channel,peak):
-	"""
-	This function takes the peak index and takes the index of its boundaries.
-	This will use a sliding window to find the first zero-slope peak/dip on
-	the left or right part of the peak.
-	Input: index of peak
-	Output: left boundary index
-	"""
-	leftbound = peak
-	rightbound= peak
-
-	dipFound = False
-	while dipFound == False:
-		slope = (channel[leftbound-1]-channel[leftbound])/((leftbound-1)-leftbound)
-		if slope <= 0:
-			dipFound = True
-			leftbound += 1
-		leftbound -= 1
-
-	
-	dipFound = False
-	while dipFound == False:
-		slope = (channel[rightbound+1]-channel[rightbound])/((rightbound+1)-rightbound)
-		if slope >= 0:
-			dipFound = True
-			rightbound -= 1
-		rightbound += 1
-
-	return(leftbound,rightbound)
+# def main():
+# 	filename = "A_BOH_12_12.fsa"
+# 	directory="/home/bo/PGC/microsat/testdata/training/GetHeight/"
+# 	filecsv = pd.read_csv(directory+"Channel1_mini_areamethod.csv")
 
 
 
-def main():
-	filename = "A_BOH_12_12.fsa"
-	directory="/home/bo/PGC/microsat/testdata/training/GetHeight/"
-	filecsv = pd.read_csv(directory+"Channel1_mini_areamethod.csv")
+# 	print("This script currently only supports .fsa Files from ABI(R) 3730 Sequencing Machine")
+# 	print("Initializing....")
+
+# 	window = visualize_all(filename)
+
+# 	df_labels = ["filename","selpeaks","selheight","selarea","peakarea",
+# 				"stutarea","notpeak","notheight","notarea","notpeakarea","notstuarea"]
+
+# 	my_df = pd.DataFrame(columns=df_labels)
 
 
+# 	print(len(filecsv))
+# 	for i in range(len(filecsv)):
+# 		filename = filenamePrep(filecsv.iat[i, 0])
+# 		if filename == None:
+# 			continue
+# 		print(f"Training data, {i+1}/{range(len(filecsv))} files")
+# 		array = plotgraph(directory,filename,window)
+# 		my_df = my_df.append(pd.Series(array,my_df.columns),ignore_index=True)
+# 		print(my_df)
+# 	colname = trainingdata.pop(0)
+# 	# df = pd.DataFrame(trainingdata,columns=colname, dtype=int)
+# 	# my_df.to_pickle("Channel1_mini_areamethod_result2.pk1")
 
-	print("This script currently only supports .fsa Files from ABI(R) 3730 Sequencing Machine")
-	print("Initializing....")
-
-	window = visualize_all(filename)
-
-	df_labels = ["filename","selpeaks","selheight","selarea","peakarea",
-				"stutarea","notpeak","notheight","notarea","notpeakarea","notstuarea"]
-
-	my_df = pd.DataFrame(columns=df_labels)
-
-
-	print(len(filecsv))
-	for i in range(len(filecsv)):
-		filename = filenamePrep(filecsv.iat[i, 0])
-		if filename == None:
-			continue
-		print(f"Training data, {i+1}/{range(len(filecsv))} files")
-		array = plotgraph(directory,filename,window)
-		my_df = my_df.append(pd.Series(array,my_df.columns),ignore_index=True)
-		print(my_df)
-	colname = trainingdata.pop(0)
-	# df = pd.DataFrame(trainingdata,columns=colname, dtype=int)
-	# my_df.to_pickle("Channel1_mini_areamethod_result2.pk1")
-
-	# plotgraph(directory,filename,window)
-main()
-# linearRegPredict()
+# 	# plotgraph(directory,filename,window)
+# main()
+# # LogRegFit()
 
