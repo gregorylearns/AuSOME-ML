@@ -33,7 +33,7 @@ def Peakboundaries(channel,peak):
 	This will use a sliding window to find the first zero-slope peak/dip on
 	the left or right part of the peak.
 	Input: index of peak
-	Output: left boundary index
+	Output: left boundary index, tuple of left and right boundary index
 	"""
 	leftbound = peak
 	rightbound= peak
@@ -242,9 +242,6 @@ def plotgraph(directory, filename,peakwindow,threshold=2000):
 	"""
 	# return([filename, sel_peaks,height,seg_area,pk_area,stu_area,not_sel_peaks,not_height,not_seg_area,pk_area_not,stu_area_not])
 
-filename = "A_BOH_12_12.fsa"
-directory="/home/bo/PGC/microsat/testdata/training/GetHeight/"
-print(plotgraph(directory,filename,(2500,5000)))
 
 
 def ROCCurveplot(model,x_test,y_test,y_train):
@@ -270,7 +267,7 @@ def ROCCurveplot(model,x_test,y_test,y_train):
 
 
 
-def LogRegFit():
+def LogRegFit_train():
 	"""
 	Machine learning predictive model.
 	"""
@@ -320,6 +317,15 @@ def LogRegFit():
 
 	return()
 
+def LogRegFit_pred():
+	"""
+	Reads the pickle dump of the logistic regression, and use the model to predict probabilities.
+	"""
+
+
+filename = "A_BOH_12_12.fsa"
+directory="/home/bo/PGC/microsat/testdata/training/GetHeight/"
+print(plotgraph(directory,filename,(2500,5000)))
 
 
 # def main():
