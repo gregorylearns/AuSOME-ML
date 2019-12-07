@@ -1,3 +1,14 @@
+"""
+This script was initially planned to be used alongside the R package, Fragman. Fragman was able to output
+it's own ladder values in base pairs and indices. Since that was kind of the standard, we thought na 
+We should use its output for our calibration. The intended steps were as follows:
+1. Use Fragman to fit our ladder
+2. Output the ladder into a csv(?) format
+3. Use this script to continue analysis.
+
+Turns out this script isn't that much needed since we made our own ladder fitting script. ladder_fit.py.
+Archived 12/9/19
+"""
 #ladder convert py
 #Greg, 9.20.19 4pm
 ## To do: efficiently use pandas instad of lists

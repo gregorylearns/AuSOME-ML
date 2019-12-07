@@ -1,3 +1,16 @@
+"""
+This script transforms the current csv formatting of
+Filename1   true_peak1	true_peak2
+Filename2	true_peak1	true_peak2
+
+into
+Filename1	true_peak1
+Filename1	true_peak2
+Filename2	true_peak1
+Filename2	true_peak2
+
+Useful when preparing the training data.
+"""
 #per row
 import pandas as pd
 

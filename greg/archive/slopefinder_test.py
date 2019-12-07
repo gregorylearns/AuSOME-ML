@@ -1,4 +1,10 @@
 #slopefinder
+#Reading on 12/7/19. I have no idea what this code does
+#Aw it's the precursor to the PeakBoundaries fxn in areamethod.py
+#This was made to interact with my pickled result dataframe.
+#nothing to see here.
+
+
 import matplotlib.pyplot as plt
 from Bio import SeqIO
 from findpeaks import findpeaks as fp

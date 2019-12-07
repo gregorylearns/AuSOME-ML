@@ -1,3 +1,9 @@
+"""
+Given a csv file, check a directory for containing the files listed
+on the csv.
+Helped us find a lot of problems when we were initializing our training data. 
+Specific use script. Will archive (12/7/19)
+"""
 #directory check
 
 from os.path import exists

@@ -1,3 +1,7 @@
+"""
+Used mainly to create graphs that was used for the paper for IMBUE requirement.
+"""
+
 from sys import argv
 from Bio import SeqIO
 from matplotlib import pyplot as plt
