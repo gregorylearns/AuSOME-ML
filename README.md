@@ -2,40 +2,65 @@
 
 Ian Francine Demavivas
 Galileo Gregory Abrasaldo II
+Shebna Rose Fabilioren
 Kenneth Kim
 
-# Intended Pipeline
-## A. Use Fragman R Library to match .fsa file and calibrate with ladder
-*from Fragman documentation https://cran.r-project.org/web/packages/Fragman/Fragman.pdf*
+## Disclaimer
 
-1. Load Fragman and assign the directory path.  
+The code will be very hard to read. We will continuously attempt to try and tidy it up. We are not experienced programmers. And for some of us, this was among our first large Python project.
 
->library(Fragman)  
->folder <- "~/myfolder"  
-
-2. Store the fragment data using the storing.inds() function. set channels=5 since we are using the LIZ-500 dye.  
-
->my.fragments <- storing.inds(folder,channels=5)  
->  
->class(my.fragments) <- "fsa_stored"
-
-3. Match your ladder  with LIZ-500 standard
-
->matched.ladder <- c(35, 50, 75, 100, 139, 150, 160, 200, 250, 300, 340, 350, 400, 450, 490, 500) 
->ladder.info.attach(stored=my.fragments, ladder=matched.ladder)  
->matched.lad <- list.data.covarrubias #this is where the matched ladder data is stored  
-
-4. Output the ladder-matched file in csv format with the same filename  
-
->for(i in 1:length(matched.lad)){  
->	write.table(data.frame(matched.lad[[i]]), gsub(".fsa", ".csv", names(matched.lad)[i]), quote=T, sep=',', col.names=TRUE)  
->} 
-
-To visualize the output, adjust the channels and thresh accordingly:  
-
->overview2(my.inds=my.fragments, channel = 2:3, ladder=matched.ladder, init.thresh=5000)
-
->(bad codelapply(matched.lad, function(x) write.table(data.frame(x), 'test.csv',quote=T  , append=T, sep=',',col.names=TRUE)))
+Thank you for your patience.
 
 
-## B. Use Python to continue development
+## Background
+
+
+This was a bioinformatics project during internship at the Philippine Genome Center during September - October 2019.
+
+AUtomated Scoring of MicrosatellitEs using Machine Learning (AuSOMe-ML) aims to be a proof of concept towards the application of machine learning techniques in automating the scoring of microsatellite peaks. 
+
+Microsatellites are non-coding bases in DNA that are usually 50-200 base pairs (bp) long. They are also known as Simple Sequence Repeats (SSRs) or Short Tandem Repeats (STR). They are unique to every individual organism due to errors in DNA replication and recombination. They are linked to about 14 neurological disorders. They are an important tool in fields such as forensics, population studies, and conservation genetics.
+
+When these microsatellites are sequenced, they do not yield the usual ATGC permutation found in DNA, but since they all are composed of repeating subunits, they are detected as peaks.
+
+These peaks have to be visually inspected and differentiated from distorting factors such as noise and stutters.
+
+Several non-manual methods have been explored to help automate this manual task. An image based method was tested by Daniels et al on 1998. Fragman is an R package that is aimed for this problem. The package used peak threshold as the main basis for peak-calling.
+
+This proof-of-concept was done using Applied Biosystems Inc FSA file formats.
+
+The aim of this proof of concept were to create  a predictive model that will automate allele calling of microsatellite data.
+
+### Data collection
+
+Microsatellite data obtained from Hsc 40 loci of Holothuria scabra.
+
+ABI 3730xl DNA Analyzer was used to sequence the fragments and export in ‘.fsa’ format
+
+477 fsa files containing Channels 1, 2, 3, 4, and 105 (Ladder)
+
+Hsc 40 loci contained in Channel 1 
+
+### Machine Learning Model
+
+Data was split 75-25 as training and testing datasets
+
+Data was fitted into a Random Forest Classifier
+
+5-fold cross validated using GridSearchCV to avoid overfitting.
+
+
+## Dependencies
+
+Install the dependencies by
+
+```
+$ pip3 install biopython \
+	numpy \
+	pandas \
+	matplotlib \ 
+	scikit-learn
+```
+
+Also the [findpeaks](https://github.com/jankoslavic/py-tools/blob/master/findpeaks/findpeaks.py) library by Janko Slavic.
+
