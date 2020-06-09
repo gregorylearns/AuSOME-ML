@@ -1,9 +1,6 @@
 # AUSOME Microsat
 
-Ian Francine Demavivas
-Galileo Gregory Abrasaldo II
-Shebna Rose Fabilioren
-Kenneth Kim
+Demavivas, IG, Abrasaldo, GGA II, Fabilioren SR, Kim KE
 
 ## Disclaimer
 
